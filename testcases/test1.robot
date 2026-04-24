@@ -11,7 +11,28 @@ User Able To View Profile
     login to stageCRM
     View Profile     
     log out
-Admin Able To Create User For General Managenent Role
+Verify Admin Able To Create User For General Management Role
     login to stageCRM
-    Create User Management   
-    
+    Create User Management
+    Sleep    5s
+    log out   
+# Read Mail
+    # Read Password From Email    
+Verify Admin Able To Search User
+    login to stageCRM
+    Search User
+    Sleep    5s
+    log out 
+Verify Admin Able To View User Details
+    login to stageCRM
+    # Search User
+    View User Deatails
+    Scroll Down    0    100
+    Sleep    6s
+    # log out    
+Verify And Validate That Admin Able To Export User Details
+    login to stageCRM
+    Export User Deatails
+    Sleep    20s
+    Open Downloaded XLS File    users (5).xlsx
+    log out
