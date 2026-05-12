@@ -33,6 +33,6 @@ Verify Admin Able To View User Details
 Verify And Validate That Admin Able To Export User Details
     login to stageCRM
     Export User Deatails
-    Sleep    20s
-    Open Downloaded XLS File    users (5).xlsx
+    Sleep    5s
+    Open Downloaded XLS File    users (2).xlsx
     log out

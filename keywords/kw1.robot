@@ -61,12 +61,10 @@ ${Registration_Number}    (//*[contains(@placeholder, 'e.g. 123456')])[2]
 ${Tenant_Website}    (//*[contains(@placeholder, 'https://yourcompany.com')])[2]
 ${Company_Mobile_Number}    (//*[contains(@placeholder, '00 0000 0000')])[2]
 ${Company_Email}    (//*[contains(@placeholder, 'info@company.com')])[2]
-# ${IMAP_HOST}    imap.gmail.com
-# ${IMAP_PORT}    993
-# ${IMAP_USER}    prajwal.s@wealthmax.co.uk
-# ${IMAP_PASS}    your-app-password
-# ${MAILBOX}      INBOX
-# ${SUBJECT}      Your password
+${Complaince_Email}    (//*[contains(@placeholder, 'compliance@company.com')])[2]
+${Postal_Code}    (//*[contains(@placeholder, 'e.g. SW1A 1AA')])[2]
+
+
 ${Start_Date_Button}    xpath=(//button[normalize-space()='1'])[1]
 ${End_Date_Button}      xpath=(//button[normalize-space()='1'])[2]
 
@@ -79,7 +77,8 @@ Click Element Custom
     Click Element    ${xpath}
 Input Text Custom
     [Arguments]    ${xpath1}    ${xpath2}
-   
+    Wait Until Element Is Visible    ${xpath1}    timeout=10s
+    Wait Until Element Is Enabled    ${xpath1}    timeout=10s
     Input Text    ${xpath1}    ${xpath2}
 Scroll Down
     [Arguments]    ${xaxis}    ${yaxis}
@@ -176,3 +175,4 @@ Open Downloaded XLS File
     [Arguments]    ${filename}
     ${file_path}=    Wait For Downloaded XLS File    ${filename}
     Start Process    explorer.exe    ${file_path}
+
