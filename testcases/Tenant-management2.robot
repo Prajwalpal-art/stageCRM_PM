@@ -19,13 +19,6 @@ Verify Admin Able To Create Manual Tenant
     Click Element    (//*[contains(text(), 'Save & Next')])
     Create Tenant2
     Run Conduct Check
-    # ${tenant_docs}=     Set Variable    C:/Users/lenovo/Downloads
-    # Upload Multiple Documents    Identity (ID)    ${tenant_docs}/input.pdf
-    # Upload Multiple Documents    Proof of Address    ${tenant_docs}/input.pdf
-    # Click Element Custom    //*[contains(text(), 'Save & Next')]
-    # Tenant credits
-    # Sleep    20s
-    # log out
     ${tenant_docs_dir}=     Set Variable    C:/Users/PRAJWAL SINGH/Downloads
     Upload Multiple Documents    Identity (ID)    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
     Upload Multiple Documents    Proof of Address    ${tenant_docs_dir}/input (1).pdf.pdf
@@ -86,3 +79,67 @@ Whole Tenant Creation Flow Including Manual Creation And Invite Creation
     Create Invite Tenant Licenced 2
     log out
     Close All Browsers    
+Verify Company Name Accepts Valid Input
+    login to stageCRM
+    Vaild Company Name    
+    ${tenant_docs_dir}=    Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Tenant Document    Company Logo    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Tenant Document    Privacy Policy Document    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Letter Head    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document     Duty of Care Leaflet     ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Terms of Business    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Invoice    ${tenant_docs_dir}/input (1).pdf.pdf
+    Scroll Down    0    500
+    Wait Until Element Is Enabled    xpath=//*[contains(text(), 'Save & Next')]    timeout=15s
+    Click Element    (//*[contains(text(), 'Save & Next')])
+    Create Tenant2
+    Run Conduct Check
+    
+    ${tenant_docs_dir}=     Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Multiple Documents    Identity (ID)    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Multiple Documents    Proof of Address    ${tenant_docs_dir}/input (1).pdf.pdf
+    Click Element Custom    //*[contains(text(), 'Save & Next')]
+    Tenant credits
+    Close All Browsers
+Verify Company Name cannot be left blank
+    login to stageCRM
+    Blank Company Name    
+    ${tenant_docs_dir}=    Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Tenant Document    Company Logo    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Tenant Document    Privacy Policy Document    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Letter Head    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document     Duty of Care Leaflet     ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Terms of Business    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Invoice    ${tenant_docs_dir}/input (1).pdf.pdf    
+    Scroll Down    0    500
+    Wait Until Element Is Enabled    xpath=//*[contains(text(), 'Save & Next')]    timeout=15s
+    Click Element    (//*[contains(text(), 'Save & Next')])
+    Create Tenant2
+    Run Conduct Check
+    ${tenant_docs_dir}=     Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Multiple Documents    Identity (ID)    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Multiple Documents    Proof of Address    ${tenant_docs_dir}/input (1).pdf.pdf
+    Click Element Custom    //*[contains(text(), 'Save & Next')]
+    Tenant credits
+    Close All Browsers
+Verify that the Email field is mandatory and appropriate validation is displayed when no value is entered.
+    login to stageCRM
+    Email Mandatory Field Validation
+    ${tenant_docs_dir}=    Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Tenant Document    Company Logo    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Tenant Document    Privacy Policy Document    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Letter Head    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document     Duty of Care Leaflet     ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Terms of Business    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Invoice    ${tenant_docs_dir}/input (1).pdf.pdf    
+    Scroll Down    0    500
+    Wait Until Element Is Enabled    xpath=//*[contains(text(), 'Save & Next')]    timeout=15s
+    Click Element    (//*[contains(text(), 'Save & Next')])
+    Create Tenant2
+    Run Conduct Check
+    ${tenant_docs_dir}=     Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Multiple Documents    Identity (ID)    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Multiple Documents    Proof of Address    ${tenant_docs_dir}/input (1).pdf.pdf
+    Click Element Custom    //*[contains(text(), 'Save & Next')]
+    Tenant credits
+    Close All Browsers

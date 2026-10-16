@@ -125,7 +125,7 @@ Upload Tenant Document
     Sleep    1s
     Click Element    //button[.//span[contains(normalize-space(),'Upload Document')]]
     Scroll Down    0    300
-    Sleep    1s
+    Sleep    1s    
 Run Conduct Check
     Scroll Down    0    500
     Wait Until Element Is Visible    (//button[contains(.,'Run Conduct Check')])[last()]    timeout=15s
@@ -196,3 +196,45 @@ Create Invite Tenant Licenced 2
     Input Text    xpath=//input[@type='tel']    9797889977
     Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2 
     Click Element Custom    ${Send_Invitation}
+Vaild Company Name
+    ${company_name}    ${company_title}    ${company_number}    ${company_email}    ${compliance_email}=    Generate Unique Tenant Data
+    Click Element Custom    ${Tenant_Management}    
+    Click Element Custom    ${Create_Tenant}    
+    Click Element Custom    ${Manual_Tenant_Creation} 
+    Click Element Custom    ${Continue_With_Manual}
+    Input Text Custom    (//*[contains(@placeholder, 'Enter company name')])[2]    Wealthmax Financial Advisers
+    Fill Field By Placeholder    e.g. Ltd, PLC    ${company_title}    2
+    Fill Field By Placeholder    e.g. 12345678    ${company_number}    2
+    Fill Field By Placeholder    https://yourcompany.com    https://yourcompany.com    2
+    Fill Field By Placeholder    Enter phone number    ${User_phonenumber}    1
+    Fill Field By Placeholder    info@company.com    ${company_email}    2
+    Fill Field By Placeholder    compliance@company.com    ${compliance_email}    2
+    Fill Field By Placeholder    e.g. TW89DW    TW89DW  
+    Fill Field By Placeholder    Pick Your Address      GULF AIR, 1000 GREAT WEST ROAD, BRENTFORD, MIDDLESEX
+Blank Company Name
+    ${company_name}    ${company_title}    ${company_number}    ${company_email}    ${compliance_email}=    Generate Unique Tenant Data
+    Click Element Custom    ${Tenant_Management}    
+    Click Element Custom    ${Create_Tenant}    
+    Click Element Custom    ${Manual_Tenant_Creation} 
+    Click Element Custom    ${Continue_With_Manual}
+    Fill Field By Placeholder    e.g. Ltd, PLC    ${company_title}    2
+    Fill Field By Placeholder    e.g. 12345678    ${company_number}    2
+    Fill Field By Placeholder    https://yourcompany.com    https://yourcompany.com    2
+    Fill Field By Placeholder    Enter phone number    ${User_phonenumber}    1
+     Fill Field By Placeholder    info@company.com    ${company_email}    2
+    Fill Field By Placeholder    compliance@company.com    ${compliance_email}    2
+    Fill Field By Placeholder    e.g. TW89DW    TW89DW  
+    Fill Field By Placeholder    Pick Your Address      GULF AIR, 1000 GREAT WEST ROAD, BRENTFORD, MIDDLESEX   
+Email Mandatory Field Validation
+    ${company_name}    ${company_title}    ${company_number}    ${company_email}    ${compliance_email}=    Generate Unique Tenant Data
+    Click Element Custom    ${Tenant_Management}    
+    Click Element Custom    ${Create_Tenant}    
+    Click Element Custom    ${Manual_Tenant_Creation} 
+    Click Element Custom    ${Continue_With_Manual}
+    Fill Field By Placeholder    Enter company name    ${company_name}    2
+    Fill Field By Placeholder    e.g. Ltd, PLC    ${company_title}    2
+    Fill Field By Placeholder    e.g. 12345678    ${company_number}    2
+    Fill Field By Placeholder    https://yourcompany.com    https://yourcompany.com    2
+    Fill Field By Placeholder    Enter phone number    ${User_phonenumber}    1
+    Fill Field By Placeholder    e.g. TW89DW    TW89DW  
+    Fill Field By Placeholder    Pick Your Address      GULF AIR, 1000 GREAT WEST ROAD, BRENTFORD, MIDDLESEX
