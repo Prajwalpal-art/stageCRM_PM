@@ -26,7 +26,7 @@ ${Complaince_Email}    (//*[contains(@placeholder, 'compliance@company.com')])[2
 ${Postal_Code}    (//*[contains(@placeholder, 'e.g. TW89DW')])[1]
 ${Document_Type_Dropdown}    (//*[contains(text(), 'Select Document type')])[2]
 ${Document_File_Input}    xpath=//input[@type='file']
-${Upload_Document_Button}    //button[.//span[contains(normalize-space(),'Upload Document')]]
+${Upload_Document_Button}    (//button[.//span[contains(normalize-space(),'Upload Document')]])
 ${company_name2}    (//*[contains(@placeholder, 'e.g. Wealthmax Financial Advisers')])[2]
 ${First_name2}    (//*[contains(@placeholder, 'e.g. Steve')])[2]
 ${Last_name2}    (//*[contains(@placeholder, 'e.g. Smith')])[2]
@@ -60,7 +60,7 @@ Generate Unique Tenant Data
     ${company_email}=    Evaluate    'Prajwal.s+' + '${timestamp}' + '@wealthmax.co.uk'
     ${compliance_email}=    Evaluate    'Prajwal.s+' + '${timestamp}' + '01@wealthmax.co.uk'
     
-    [Return]    ${company_name}    ${company_title}    ${company_number}    ${company_email}    ${compliance_email}
+    RETURN    ${company_name}    ${company_title}    ${company_number}    ${company_email}    ${compliance_email}
 
 Create Tenant 
     ${company_name}    ${company_title}    ${company_number}    ${company_email}    ${compliance_email}=    Generate Unique Tenant Data
@@ -69,35 +69,36 @@ Create Tenant
     Click Element Custom    ${Create_Tenant}    
     Click Element Custom    ${Manual_Tenant_Creation} 
     Click Element Custom    ${Continue_With_Manual}  
-    Sleep    2s
-    
     Fill Field By Placeholder    Enter company name    ${company_name}    2
     Fill Field By Placeholder    e.g. Ltd, PLC    ${company_title}    2
     Fill Field By Placeholder    e.g. 12345678    ${company_number}    2
     Fill Field By Placeholder    https://yourcompany.com    https://yourcompany.com    2
-    Fill Field By Placeholder    00 0000 0000    ${User_phonenumber}    2
+    Fill Field By Placeholder    Enter phone number    ${User_phonenumber}    1
     Fill Field By Placeholder    info@company.com    ${company_email}    2
     Fill Field By Placeholder    compliance@company.com    ${compliance_email}    2
-    Fill Field By Placeholder    e.g. TW89DW    TW89DW    
+    Fill Field By Placeholder    e.g. TW89DW    TW89DW  
+    Fill Field By Placeholder    Pick Your Address      GULF AIR, 1000 GREAT WEST ROAD, BRENTFORD, MIDDLESEX  
 
 Create Tenant2   
-    Input Text Custom    (//*[contains(@placeholder, 'Enter first name')])[2]    prajwal test
+    Input Text Custom    (//*[contains(@placeholder, 'Enter first name')])[2]    Prajwal Pal
     Input Text Custom    (//*[contains(@placeholder, 'Enter last name')])[2]   singh
     Fill Adult DOB
     Click Element Custom     //*[contains(text(), 'Select nationality')] 
     Click Element Custom     (//*[contains(text(), 'United Kingdom')])[2] 
     Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[1]
-    Sleep    5s
     Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
-    Sleep    5s
     Click Element Custom    //*[contains(text(), 'Yes')]
+# Fill Adult DOB
+#     ${year}=    Evaluate    __import__('datetime').date.today().year - 20
+#     Select Frame     //input[contains(@placeholder,'dd-mm-yyyy')]
+#     Click Element Custom     //button[.//span[contains(normalize-space(),'dd-mm-yyyy')]]
+#     Wait Until Element Is Visible    xpath=(//select)[1]    timeout=10s
+#     Select From List By Label    xpath=(//select)[1]    January
+#     Select From List By Label    xpath=(//select)[2]    ${year}
+#     Click Element Custom    xpath=//button[not(@disabled) and normalize-space()='15']
 Fill Adult DOB
-    ${year}=    Evaluate    __import__('datetime').date.today().year - 20
-    Click Element Custom     //button[.//span[contains(normalize-space(),'dd-mm-yyyy')]]
-    Wait Until Element Is Visible    xpath=(//select)[1]    timeout=10s
-    Select From List By Label    xpath=(//select)[1]    January
-    Select From List By Label    xpath=(//select)[2]    ${year}
-    Click Element Custom    xpath=//button[not(@disabled) and normalize-space()='15']
+       Wait Until Element Is Visible    //input[contains(@placeholder,'dd-mm-yyyy')]    10s
+    Input Text    //input[contains(@placeholder,'dd-mm-yyyy')]    15-01-2005
 Select Document Type
     [Arguments]    ${doc_type}
     Click Element Custom    ${Document_Type_Dropdown}
@@ -111,13 +112,7 @@ Click Element With JavaScript
     [Arguments]    ${text_to_find}
     ${js}=    Catenate    const btns = Array.from(document.querySelectorAll('button')); const btn = btns.find(b => b.textContent && b.textContent.includes('${text_to_find}') && window.getComputedStyle(b).display !== 'none'); if(!btn){ return false; } btn.scrollIntoView({behavior:'auto', block:'center', inline:'nearest'}); btn.click(); return true;
     ${result}=    Execute JavaScript    ${js}
-    Should Be True    ${result}    Button with text '${text_to_find}' not found or not interactable
-
-# Select Document Type2
-#     [Arguments]    ${doc_type1}
-#     Click Element Custom    (//*[contains(text(), 'Select Document type')])[2]
-#     Click Element Custom    xpath=//button[normalize-space()='${doc_type1}']    
-
+    Should Be True    ${result}    Button with text '${text_to_find}' not found or not interactable    
 Upload Tenant Document
     [Arguments]    ${doc_type}    ${file_path}
     Select Document Type    ${doc_type}
@@ -131,7 +126,6 @@ Upload Tenant Document
     Click Element    //button[.//span[contains(normalize-space(),'Upload Document')]]
     Scroll Down    0    300
     Sleep    1s
-
 Run Conduct Check
     Scroll Down    0    500
     Wait Until Element Is Visible    (//button[contains(.,'Run Conduct Check')])[last()]    timeout=15s
@@ -142,10 +136,8 @@ Run Conduct Check
         ${is_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${button}
         IF    ${is_visible}
             Click Element    ${button}
-            # Sleep    2s
         END
     END
-    # Click Save Conduct Check button
     Wait Until Element Is Visible    xpath=//button[contains(normalize-space(), 'Save')]    timeout=10s
     Click Element Custom    xpath=//button[contains(normalize-space(), 'Save')]
 Upload Multiple Documents
@@ -155,11 +147,11 @@ Upload Multiple Documents
     Wait Until Page Contains Element    (//input[@type='file'])[last()]    timeout=20s
     Choose File    (//input[@type='file'])[last()]    ${file_path1}
     Sleep    2s
-    Click Element Custom    ${Upload_Document_Button}
-    Sleep    3s
+    Click Element Custom    (//button[.//span[contains(normalize-space(),'Upload Document')]])[2]
+    Sleep    1s
 Tenant credits
-    Input Text Custom    (//*[contains(@placeholder, 'e.g. 1000')])[2]    100
-    Input Text Custom    (//*[contains(@placeholder, 'e.g. 12 months')])[2]    12
+    Input Text Custom    (//*[contains(@placeholder, 'e.g. 1000')])[2]    1000
+    Input Text Custom    (//*[contains(@placeholder, 'e.g. 12 months')])[2]    11
     Click Element Custom    //*[contains(text(), 'Initiate Agreement')]
 Invite Tenant Creation
     Click Element Custom    ${Tenant_Management}    
@@ -184,14 +176,13 @@ Generate Unique Tenants Data
     ${Last_name2}=    Evaluate    'Singh' 
     ${Company_Mobile_Number}=    Evaluate    '${timestamp1}'
     ${company_email2}=    Evaluate    'Prajwal.s+' + '${timestamp1}' + '@wealthmax.co.uk'
-   
-    [Return]    ${company_name2}    ${First_name2}    ${Last_name2}    ${Company_Mobile_Number}    ${company_email2}
+    RETURN   ${company_name2}    ${First_name2}    ${Last_name2}    ${Company_Mobile_Number}    ${company_email2}
 Create Invite Tenant Licenced 1
-    ${company_name2}    ${First_name2}    ${Last_name2}    ${User_phonenumber}     ${company_email2}=    Generate Unique Tenants Data
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type=tel}     ${company_email2}=    Generate Unique Tenants Data
     Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
     Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
     Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
-    Fill Field By Placeholder    Enter mobile number    ${User_phonenumber}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
     Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2   
     Click Element Custom    ${Licensed}
     Input Text Custom    ${User_Credits1}    50
@@ -202,6 +193,6 @@ Create Invite Tenant Licenced 2
     Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
     Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
     Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
-    Fill Field By Placeholder    Enter mobile number    ${User_phonenumber}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
     Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2 
-    Click Element Custom    ${Send_Invitation} 
+    Click Element Custom    ${Send_Invitation}

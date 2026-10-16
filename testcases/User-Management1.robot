@@ -1,6 +1,6 @@
 *** Settings ***
 Resource    ../keywords/kw1.robot
-
+Test Teardown    Close All Browsers
 *** Test Cases ***
 Verify User Able To login
     login to stageCRM

@@ -53,7 +53,7 @@ ${Document_Type_Select}    xpath=//button[contains(text(), 'Select Document type
 ${Document_Upload_Input}    xpath=//input[@type='file']
 ${Upload_Button}    xpath=//button[contains(text(), 'Upload Document')]
 ${Continue_With_Manual}    //*[contains(text(), ' Continue with Manual')]
-${Enter_Company_Name}    (//*[contains(@placeholder, 'Enter company name')])[2]
+${Enter_Company_Name}    (//*[contains(@placeholder, 'Enter company name')])[1]
 # ${Company_Name}    Prajwal2
 ${Company_Title}    (//*[contains(@placeholder,'e.g. Ltd, PLC')])[2]
 ${Company_Number}    (//*[contains(@placeholder, 'e.g. 12345678')])[2]
@@ -63,17 +63,25 @@ ${Company_Mobile_Number}    (//*[contains(@placeholder, '00 0000 0000')])[2]
 ${Company_Email}    (//*[contains(@placeholder, 'info@company.com')])[2]
 ${Complaince_Email}    (//*[contains(@placeholder, 'compliance@company.com')])[2]
 ${Postal_Code}    (//*[contains(@placeholder, 'e.g. SW1A 1AA')])[2]
-
-
 ${Start_Date_Button}    xpath=(//button[normalize-space()='1'])[1]
 ${End_Date_Button}      xpath=(//button[normalize-space()='1'])[2]
 
 
 *** Keywords ***
+# Click Element Custom
+#     [Arguments]    ${xpath}
+#     Wait Until Element Is Visible    ${xpath}    timeout=15s
+#     Wait Until Element Is Enabled    ${xpath}    timeout=10s
+#     Click Element    ${xpath}
 Click Element Custom
     [Arguments]    ${xpath}
+
+    Run Keyword And Ignore Error    Wait Until Element Is Not Visible    xpath=//div[@role='status']     10s
     Wait Until Element Is Visible    ${xpath}    timeout=15s
     Wait Until Element Is Enabled    ${xpath}    timeout=10s
+
+    Scroll Element Into View    ${xpath}
+
     Click Element    ${xpath}
 Input Text Custom
     [Arguments]    ${xpath1}    ${xpath2}
@@ -162,14 +170,14 @@ Export User Deatails
 Get Default Download Directory
     ${userprofile}=    Get Environment Variable    USERPROFILE
     ${download_dir}=    Join Path    ${userprofile}    Downloads
-    [Return]    ${download_dir}
+    RETURN    ${download_dir}
 
 Wait For Downloaded XLS File
     [Arguments]    ${filename}    ${timeout}=60s
     ${download_dir}=    Get Default Download Directory
     ${file_path}=    Join Path    ${download_dir}    ${filename}
     Wait Until Keyword Succeeds    ${timeout}    5s    File Should Exist    ${file_path}
-    [Return]    ${file_path}
+    RETURN   ${file_path}
 
 Open Downloaded XLS File
     [Arguments]    ${filename}
