@@ -37,6 +37,7 @@ ${User_Credits1}    (//*[contains(@placeholder, 'e.g. 10')])[2]
 ${Subscription_Duration}    (//*[contains(@placeholder, 'e.g. 12 months')])[2]
 ${Send_Invitation}    (//*[contains(text(), 'Send Invitation')])
 ${Subscription_Duration1}    (//*[contains(text(), 'Free Trial')])[2]
+${Wealthmax_Name}    Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers
 
 
 *** Keywords ***
@@ -88,14 +89,7 @@ Create Tenant2
     Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[1]
     Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
     Click Element Custom    //*[contains(text(), 'Yes')]
-# Fill Adult DOB
-#     ${year}=    Evaluate    __import__('datetime').date.today().year - 20
-#     Select Frame     //input[contains(@placeholder,'dd-mm-yyyy')]
-#     Click Element Custom     //button[.//span[contains(normalize-space(),'dd-mm-yyyy')]]
-#     Wait Until Element Is Visible    xpath=(//select)[1]    timeout=10s
-#     Select From List By Label    xpath=(//select)[1]    January
-#     Select From List By Label    xpath=(//select)[2]    ${year}
-#     Click Element Custom    xpath=//button[not(@disabled) and normalize-space()='15']
+
 Fill Adult DOB
        Wait Until Element Is Visible    //input[contains(@placeholder,'dd-mm-yyyy')]    10s
     Input Text    //input[contains(@placeholder,'dd-mm-yyyy')]    15-01-2005
@@ -238,3 +232,96 @@ Email Mandatory Field Validation
     Fill Field By Placeholder    Enter phone number    ${User_phonenumber}    1
     Fill Field By Placeholder    e.g. TW89DW    TW89DW  
     Fill Field By Placeholder    Pick Your Address      GULF AIR, 1000 GREAT WEST ROAD, BRENTFORD, MIDDLESEX
+Company Name Maximum Length Validation
+     ${company_name}    ${company_title}    ${company_number}    ${company_email}    ${compliance_email}=    Generate Unique Tenant Data
+    Click Element Custom    ${Tenant_Management}    
+    Click Element Custom    ${Create_Tenant}    
+    Click Element Custom    ${Manual_Tenant_Creation} 
+    Click Element Custom    ${Continue_With_Manual}
+    Input Text Custom    (//*[contains(@placeholder, 'Enter company name')])[2]    ${Wealthmax_Name} 
+    # Fill Field By Placeholder    Enter company name    ${company_name}    2
+    Fill Field By Placeholder    e.g. Ltd, PLC    ${company_title}    2
+    Fill Field By Placeholder    e.g. 12345678    ${company_number}    2
+    Fill Field By Placeholder    https://yourcompany.com    https://yourcompany.com    2
+    Fill Field By Placeholder    Enter phone number    ${User_phonenumber}    1
+    Fill Field By Placeholder    info@company.com    ${company_email}    2
+    Fill Field By Placeholder    compliance@company.com    ${compliance_email}    2
+    Fill Field By Placeholder    e.g. TW89DW    TW89DW  
+    Fill Field By Placeholder    Pick Your Address      GULF AIR, 1000 GREAT WEST ROAD, BRENTFORD, MIDDLESEX  
+First Name Valid Entry
+    ${company_name}    ${company_title}    ${company_number}    ${company_email}    ${compliance_email}=    Generate Unique Tenant Data
+    Click Element Custom    ${Tenant_Management}    
+    Click Element Custom    ${Create_Tenant}    
+    Click Element Custom    ${Manual_Tenant_Creation} 
+    Click Element Custom    ${Continue_With_Manual}
+    Fill Field By Placeholder    Enter company name    ${company_name}    2
+    Fill Field By Placeholder    e.g. Ltd, PLC    ${company_title}    2
+    Fill Field By Placeholder    e.g. 12345678    ${company_number}    2
+    Fill Field By Placeholder    e.g. Ltd, PLC    ${company_title}    2
+    Fill Field By Placeholder    e.g. 12345678    ${company_number}    2
+    Fill Field By Placeholder    https://yourcompany.com    https://yourcompany.com    2
+    Fill Field By Placeholder    Enter phone number    ${User_phonenumber}    1
+    Fill Field By Placeholder    info@company.com    ${company_email}    2
+    Fill Field By Placeholder    compliance@company.com    ${compliance_email}    2
+    Fill Field By Placeholder    e.g. TW89DW    TW89DW  
+    Fill Field By Placeholder    Pick Your Address      GULF AIR, 1000 GREAT WEST ROAD, BRENTFORD, MIDDLESEX
+Create Tenant Company In formantion  
+    Input Text Custom    (//*[contains(@placeholder, 'Enter first name')])[2]    Prajwal Pal
+    Input Text Custom    (//*[contains(@placeholder, 'Enter last name')])[2]   singh
+    Fill Adult DOB
+    Click Element Custom     //*[contains(text(), 'Select nationality')] 
+    Click Element Custom     (//*[contains(text(), 'United Kingdom')])[2] 
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[1]
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
+    Click Element Custom    //*[contains(text(), 'Yes')]    
+First Name Mandatory Field Validation
+    Fill Adult DOB
+    Click Element Custom     //*[contains(text(), 'Select nationality')] 
+    Click Element Custom     (//*[contains(text(), 'United Kingdom')])[2] 
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[1]
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
+    Click Element Custom    //*[contains(text(), 'Yes')]
+Company Name Special Characters Validation
+    ${company_name}    ${company_title}    ${company_number}    ${company_email}    ${compliance_email}=    Generate Unique Tenant Data
+    Click Element Custom    ${Tenant_Management}    
+    Click Element Custom    ${Create_Tenant}    
+    Click Element Custom    ${Manual_Tenant_Creation} 
+    Click Element Custom    ${Continue_With_Manual}
+    Input Text Custom    (//*[contains(@placeholder, 'Enter company name')])[2]    Wealthmax Financial Advisers @#$%^&*()_+
+    Fill Field By Placeholder    e.g. Ltd, PLC    ${company_title}    2
+    Fill Field By Placeholder    e.g. 12345678    ${company_number}    2
+    Fill Field By Placeholder    e.g. Ltd, PLC    ${company_title}    2
+    Fill Field By Placeholder    e.g. 12345678    ${company_number}    2
+    Fill Field By Placeholder    https://yourcompany.com    https://yourcompany.com    2
+    Fill Field By Placeholder    Enter phone number    ${User_phonenumber}    1
+    Fill Field By Placeholder    info@company.com    ${company_email}    2
+    Fill Field By Placeholder    compliance@company.com    ${compliance_email}    2
+    Fill Field By Placeholder    e.g. TW89DW    TW89DW  
+    Fill Field By Placeholder    Pick Your Address      GULF AIR, 1000 GREAT WEST ROAD, BRENTFORD, MIDDLESEX    
+First Name Numeric Character Validation
+    Input Text Custom    (//*[contains(@placeholder, 'Enter first name')])[2]    Prajwal Pal121
+    Input Text Custom    (//*[contains(@placeholder, 'Enter last name')])[2]   singh
+    Fill Adult DOB
+    Click Element Custom     //*[contains(text(), 'Select nationality')] 
+    Click Element Custom     (//*[contains(text(), 'United Kingdom')])[2] 
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[1]
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
+    Click Element Custom    //*[contains(text(), 'Yes')]
+# Fill Adult DOB
+Last Name Mandatory Field Validation
+    Input Text Custom    (//*[contains(@placeholder, 'Enter first name')])[2]    Prajwal Pal
+    Fill Adult DOB
+    Click Element Custom     //*[contains(text(), 'Select nationality')] 
+    Click Element Custom     (//*[contains(text(), 'United Kingdom')])[2] 
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[1]
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]    
+    Click Element Custom    //*[contains(text(), 'Yes')]
+Mobile Number Valid Entry
+    Input Text Custom    (//*[contains(@placeholder, 'Enter first name')])[2]    Prajwal Pal
+    Input Text Custom    (//*[contains(@placeholder, 'Enter last name')])[2]   singh
+    Fill Adult DOB
+    Click Element Custom     //*[contains(text(), 'Select nationality')] 
+    Click Element Custom     (//*[contains(text(), 'United Kingdom')])[2] 
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[1]
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
+    Click Element Custom    //*[contains(text(), 'Yes')]

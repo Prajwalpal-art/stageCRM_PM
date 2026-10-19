@@ -143,3 +143,121 @@ Verify that the Email field is mandatory and appropriate validation is displayed
     Click Element Custom    //*[contains(text(), 'Save & Next')]
     Tenant credits
     Close All Browsers
+verify the maximum character limit for the Company Name field
+    login to stageCRM
+    Company Name Maximum Length Validation
+    ${tenant_docs_dir}=    Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Tenant Document    Company Logo    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Tenant Document    Privacy Policy Document    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Letter Head    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document     Duty of Care Leaflet     ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Terms of Business    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Invoice    ${tenant_docs_dir}/input (1).pdf.pdf    
+     Scroll Down    0    500
+    Wait Until Element Is Enabled    xpath=//*[contains(text(), 'Save & Next')]    timeout=15s
+    Click Element    (//*[contains(text(), 'Save & Next')])
+    Create Tenant2
+ verify that the First Name field accepts valid alphabetic characters
+    login to stageCRM
+    First Name Valid Entry
+    ${tenant_docs_dir}=    Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Tenant Document    Company Logo    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Tenant Document    Privacy Policy Document    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Letter Head    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document     Duty of Care Leaflet     ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Terms of Business    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Invoice    ${tenant_docs_dir}/input (1).pdf.pdf    
+    Scroll Down    0    500
+    Wait Until Element Is Enabled    xpath=//*[contains(text(), 'Save & Next')]    timeout=15s
+    Click Element    (//*[contains(text(), 'Save & Next')])
+    Create Tenant Company In formantion
+    Run Conduct Check
+    ${tenant_docs_dir}=     Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Multiple Documents    Identity (ID)    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Multiple Documents    Proof of Address    ${tenant_docs_dir}/input (1).pdf.pdf
+    Click Element Custom    //*[contains(text(), 'Save & Next')]
+    Tenant credits
+    Close All Browsers    
+Verify that the First Name field is mandatory
+    login to stageCRM
+    First Name Valid Entry
+    ${tenant_docs_dir}=    Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Tenant Document    Company Logo    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Tenant Document    Privacy Policy Document    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Letter Head    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document     Duty of Care Leaflet     ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Terms of Business    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Invoice    ${tenant_docs_dir}/input (1).pdf.pdf    
+    Scroll Down    0    500
+    Wait Until Element Is Enabled    xpath=//*[contains(text(), 'Save & Next')]    timeout=15s
+    Click Element    (//*[contains(text(), 'Save & Next')])
+    First Name Mandatory Field Validation
+    Run Conduct Check
+    ${tenant_docs_dir}=     Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Multiple Documents    Identity (ID)    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Multiple Documents    Proof of Address    ${tenant_docs_dir}/input (1).pdf.pdf
+    Click Element Custom    //*[contains(text(), 'Save & Next')]
+    Tenant credits
+Verify that the Company Name field accepts permitted special characters
+    login to stageCRM
+    Company Name Special Characters Validation
+    ${tenant_docs_dir}=    Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Tenant Document    Company Logo    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Tenant Document    Privacy Policy Document    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Letter Head    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document     Duty of Care Leaflet     ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Terms of Business    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Invoice    ${tenant_docs_dir}/input (1).pdf.pdf    
+    Scroll Down    0    500
+    Wait Until Element Is Enabled    xpath=//*[contains(text(), 'Save & Next')]    timeout=15s
+    Click Element    (//*[contains(text(), 'Save & Next')])
+    Create Tenant Company In formantion
+    Run Conduct Check
+    ${tenant_docs_dir}=     Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Multiple Documents    Identity (ID)    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Multiple Documents    Proof of Address    ${tenant_docs_dir}/input (1).pdf.pdf
+    Click Element Custom    //*[contains(text(), 'Save & Next')]
+    Tenant credits
+    Close All Browsers
+Verify that numeric characters are not allowed in the First Name field
+    login to stageCRM
+    Create Tenant
+    ${tenant_docs_dir}=    Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Tenant Document    Company Logo    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Tenant Document    Privacy Policy Document    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Letter Head    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document     Duty of Care Leaflet     ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Terms of Business    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Invoice    ${tenant_docs_dir}/input (1).pdf.pdf
+    Scroll Down    0    500
+    Wait Until Element Is Enabled    xpath=//*[contains(text(), 'Save & Next')]    timeout=15s
+    Click Element    (//*[contains(text(), 'Save & Next')])
+    First Name Numeric Character Validation
+    Run Conduct Check
+    ${tenant_docs_dir}=     Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Multiple Documents    Identity (ID)    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Multiple Documents    Proof of Address    ${tenant_docs_dir}/input (1).pdf.pdf
+    Click Element Custom    //*[contains(text(), 'Save & Next')]
+    Tenant credits
+    Close All Browsers 
+Verify that the Last Name field is mandatory
+    login to stageCRM
+    Create Tenant
+    ${tenant_docs_dir}=    Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Tenant Document    Company Logo    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Tenant Document    Privacy Policy Document    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Letter Head    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document     Duty of Care Leaflet     ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Terms of Business    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Invoice    ${tenant_docs_dir}/input (1).pdf.pdf    
+    Scroll Down    0    500
+    Wait Until Element Is Enabled    xpath=//*[contains(text(), 'Save & Next')]    timeout=15s
+    Click Element    (//*[contains(text(), 'Save & Next')])
+    Last Name Mandatory Field Validation
+    Run Conduct Check
+    ${tenant_docs_dir}=     Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Multiple Documents    Identity (ID)    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Multiple Documents    Proof of Address    ${tenant_docs_dir}/input (1).pdf.pdf
+    Click Element Custom    //*[contains(text(), 'Save & Next')]
+    Tenant credits
+    Close All Browsers    
