@@ -23,6 +23,7 @@ Verify Admin Able To Create Manual Tenant
     Upload Multiple Documents    Identity (ID)    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
     Upload Multiple Documents    Proof of Address    ${tenant_docs_dir}/input (1).pdf.pdf
     Click Element Custom    //*[contains(text(), 'Save & Next')]
+    Sleep    2000s
     Tenant credits
     Close All Browsers
     
@@ -379,3 +380,24 @@ Verify Invalid Email Format Validation in Licensed Tenant Creation
     Upload Multiple Documents    Identity (ID)    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
     Upload Multiple Documents    Proof of Address    ${tenant_docs_dir}/input (1).pdf.pdf
     Click Element Custom    //*[contains(text(), 'Save & Next')]
+Verify Duplicate Email Validation in Licensed Tenant Creation
+    login to stageCRM
+    Create Tenant
+    ${tenant_docs_dir}=    Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Tenant Document    Company Logo    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Tenant Document    Privacy Policy Document    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Letter Head    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document     Duty of Care Leaflet     ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Terms of Business    ${tenant_docs_dir}/input (1).pdf.pdf
+    Upload Tenant Document    Invoice    ${tenant_docs_dir}/input (1).pdf.pdf
+    Scroll Down    0    500
+    Wait Until Element Is Enabled    xpath=//*[contains(text(), 'Save & Next')]    timeout=15s
+    Click Element    (//*[contains(text(), 'Save & Next')])
+    Already registered email addresses
+    Run Conduct Check
+    ${tenant_docs_dir}=     Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    Upload Multiple Documents    Identity (ID)    ${tenant_docs_dir}/bikes-5972672_1920.jpg.jpg
+    Upload Multiple Documents    Proof of Address    ${tenant_docs_dir}/input (1).pdf.pdf
+    Click Element Custom    //*[contains(text(), 'Save & Next')]
+    Tenant credits
+    Close All Browsers
