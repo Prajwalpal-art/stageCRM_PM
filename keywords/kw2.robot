@@ -325,3 +325,64 @@ Mobile Number Valid Entry
     Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[1]
     Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
     Click Element Custom    //*[contains(text(), 'Yes')]
+Mobile Valid Entry
+    Input Text Custom    (//*[contains(@placeholder, 'Enter first name')])[2]    Prajwal Pal
+    Input Text Custom    (//*[contains(@placeholder, 'Enter last name')])[2]   singh
+    Fill Adult DOB
+    Click Element Custom     //*[contains(text(), 'Select nationality')] 
+    Click Element Custom     (//*[contains(text(), 'United Kingdom')])[2] 
+    Click Element Custom    (//div[contains(@class,'iti__selected-country-primary')])[2]
+    Input Text Custom    //input[@role='combobox']    India
+    Click Element Custom    (//*[contains(text(),'India')])[1]
+    Input Text Custom     (//input[contains(@placeholder,'Enter phone number')])[2]   9797111111 
+    Input Text Custom    //input[@type='email' and @placeholder='admin@company.com']    Prajwal.s+0990@wealthmax.co.uk  
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
+    Click Element Custom    //*[contains(text(), 'Yes')]    
+Mobile Number field left blank
+    Input Text Custom    (//*[contains(@placeholder, 'Enter first name')])[2]    Prajwal Pal
+    Input Text Custom    (//*[contains(@placeholder, 'Enter last name')])[2]   singh
+    Fill Adult DOB
+    Click Element Custom     //*[contains(text(), 'Select nationality')] 
+    Click Element Custom     (//*[contains(text(), 'United Kingdom')])[2]
+    Input Text Custom    //input[@type='email' and @placeholder='admin@company.com']    Prajwal.s+0991@wealthmax.co.uk 
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
+    Click Element Custom    //*[contains(text(), 'Yes')]
+Incorrect Mobile Number format
+    Input Text Custom    (//*[contains(@placeholder, 'Enter first name')])[2]    Prajwal Pal
+    Input Text Custom    (//*[contains(@placeholder, 'Enter last name')])[2]   singh
+    Fill Adult DOB
+    Click Element Custom     //*[contains(text(), 'Select nationality')] 
+    Click Element Custom     (//*[contains(text(), 'United Kingdom')])[2]
+    Input Text Custom     (//input[contains(@placeholder,'Enter phone number')])[2]   1234 
+    Input Text Custom    //input[@type='email' and @placeholder='admin@company.com']    Prajwal.s+0990@wealthmax.co.uk  
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
+    Click Element Custom    //*[contains(text(), 'Yes')]
+Email field with valid email format
+    Input Text Custom    (//*[contains(@placeholder, 'Enter first name')])[2]    Prajwal Pal
+    Input Text Custom    (//*[contains(@placeholder, 'Enter last name')])[2]   singh
+    Fill Adult DOB
+    Click Element Custom     //*[contains(text(), 'Select nationality')] 
+    Click Element Custom     (//*[contains(text(), 'United Kingdom')])[2]
+    Input Text Custom     (//input[contains(@placeholder,'Enter phone number')])[2]   9797111111 
+    Input Text Custom    //input[@type='email' and @placeholder='admin@company.com']    Prajwal.s+0992@wealthmax.co.uk  
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
+    Click Element Custom    //*[contains(text(), 'Yes')]
+Email field is left blank
+    Input Text Custom    (//*[contains(@placeholder, 'Enter first name')])[2]    Prajwal Pal
+    Input Text Custom    (//*[contains(@placeholder, 'Enter last name')])[2]   singh
+    Fill Adult DOB
+    Click Element Custom     //*[contains(text(), 'Select nationality')] 
+    Click Element Custom     (//*[contains(text(), 'United Kingdom')])[2]
+    Input Text Custom     (//input[contains(@placeholder,'Enter phone number')])[2]   9797111111 
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
+    Click Element Custom    //*[contains(text(), 'Yes')]
+Invalid email format
+    Input Text Custom    (//*[contains(@placeholder, 'Enter first name')])[2]    Prajwal Pal
+    Input Text Custom    (//*[contains(@placeholder, 'Enter last name')])[2]   singh
+    Fill Adult DOB
+    Click Element Custom     //*[contains(text(), 'Select nationality')] 
+    Click Element Custom     (//*[contains(text(), 'United Kingdom')])[2]
+    Input Text Custom     (//input[contains(@placeholder,'Enter phone number')])[2]   9797111111 
+    Input Text Custom    //input[@type='email' and @placeholder='admin@company.com']    admin@test  
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
+    Click Element Custom    //*[contains(text(), 'Yes')]   
