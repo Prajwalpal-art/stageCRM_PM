@@ -401,3 +401,15 @@ Verify Duplicate Email Validation in Licensed Tenant Creation
     Click Element Custom    //*[contains(text(), 'Save & Next')]
     Tenant credits
     Close All Browsers
+Verify Licensed Subscription Selection in Licensed Tenant Creation
+    login to stageCRM
+    Invite Tenant Creation
+    Licensed subscription type selection validation
+Verify Free Trial Deselection When Licensed Subscription is Selected
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Subscription Selection Behavior  
+Verify Valid User Credits Entry in Licensed Tenant Creation
+    login to stageCRM
+    Invite Tenant Creation
+    Validate User Credits With Valid Value     

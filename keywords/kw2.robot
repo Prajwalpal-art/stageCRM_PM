@@ -38,7 +38,8 @@ ${Subscription_Duration}    (//*[contains(@placeholder, 'e.g. 12 months')])[2]
 ${Send_Invitation}    (//*[contains(text(), 'Send Invitation')])
 ${Subscription_Duration1}    (//*[contains(text(), 'Free Trial')])[2]
 ${Wealthmax_Name}    Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers
-
+${Licensed_Selected}    //p[normalize-space()='Licensed']/ancestor::div[contains(@class,'cursor-pointer')]//div[contains(@class,'bg-indigo600')]
+${Free_Trial_Selected}    //p[normalize-space()='Free Trial']/ancestor::div[contains(@class,'cursor-pointer')]//div[contains(@class,'bg-indigo600')]
 
 *** Keywords ***
 Fill Field By Placeholder
@@ -396,3 +397,40 @@ Already registered email addresses
     Input Text Custom    //input[@type='email' and @placeholder='admin@company.com']    Prajwal.s+0992@wealthmax.co.uk
     Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
     Click Element Custom    //*[contains(text(), 'Yes')]
+Licensed subscription type selection validation
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type=tel}     ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Wait Until Element Is Visible    ${Licensed_Selected}    10s
+    Element Should Be Visible    ${Licensed_Selected}
+Validate Subscription Selection Behavior
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type=tel}     ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    # Verify Licensed is selected
+    Wait Until Element Is Visible    ${Licensed_Selected}    10s
+    Element Should Be Visible    ${Licensed_Selected}
+    # Verify Free Trial is not selected
+    ${free_trial_count}=    Get Element Count    ${Free_Trial_Selected}
+    Should Be Equal As Integers    ${free_trial_count}    0
+Validate User Credits With Valid Value
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type=tel}     ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Wait Until Element Is Visible    ${User_Credits1}    10s
+    Input Text Custom    ${User_Credits1}    10
+    Element Attribute Value Should Be    ${User_Credits1}    value    10
+    Page Should Not Contain    The field UserCredits must be between 1 and 2147483647.
+    
