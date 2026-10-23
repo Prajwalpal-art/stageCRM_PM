@@ -3205,3 +3205,311 @@ Without any arguments.</msg>
 <status status="PASS" start="2026-10-22T19:46:31.295004" elapsed="0.005973"/>
 </kw>
 <kw name="Wait Until Element Is Enabled" owner="SeleniumLibrary">
+<arg>${xpath}</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is enabled.</doc>
+<status status="PASS" start="2026-10-22T19:46:31.301107" elapsed="0.007296"/>
+</kw>
+<kw name="Scroll Element Into View" owner="SeleniumLibrary">
+<arg>${xpath}</arg>
+<doc>Scrolls the element identified by ``locator`` into view.</doc>
+<status status="PASS" start="2026-10-22T19:46:31.308521" elapsed="0.258939"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-10-22T19:46:31.568598" level="INFO">Clicking element '(//button[.//span[contains(normalize-space(),'Upload Document')]])[2]'.</msg>
+<arg>${xpath}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-22T19:46:31.567926" elapsed="0.033608"/>
+</kw>
+<arg>(//button[.//span[contains(normalize-space(),'Upload Document')]])[2]</arg>
+<status status="PASS" start="2026-10-22T19:46:31.290072" elapsed="0.311600"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-10-22T19:46:32.602677" level="INFO">Slept 1 second.</msg>
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-10-22T19:46:31.601803" elapsed="1.001311"/>
+</kw>
+<arg>Proof of Address</arg>
+<arg>${tenant_docs_dir}/input (1).pdf.pdf</arg>
+<status status="PASS" start="2026-10-22T19:46:25.656551" elapsed="6.946822"/>
+</kw>
+<kw name="Click Element Custom" owner="kw1">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Wait Until Element Is Not Visible" owner="SeleniumLibrary">
+<arg>xpath=//div[@role='status']</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` is not visible.</doc>
+<status status="PASS" start="2026-10-22T19:46:32.606296" elapsed="2.127914"/>
+</kw>
+<arg>Wait Until Element Is Not Visible</arg>
+<arg>xpath=//div[@role='status']</arg>
+<arg>10s</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-10-22T19:46:32.605613" elapsed="2.128716"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${xpath}</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2026-10-22T19:46:34.734453" elapsed="0.006317"/>
+</kw>
+<kw name="Wait Until Element Is Enabled" owner="SeleniumLibrary">
+<arg>${xpath}</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is enabled.</doc>
+<status status="PASS" start="2026-10-22T19:46:34.740910" elapsed="0.007714"/>
+</kw>
+<kw name="Scroll Element Into View" owner="SeleniumLibrary">
+<arg>${xpath}</arg>
+<doc>Scrolls the element identified by ``locator`` into view.</doc>
+<status status="PASS" start="2026-10-22T19:46:34.748750" elapsed="0.274790"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2026-10-22T19:46:35.024848" level="INFO">Clicking element '//*[contains(text(), 'Save &amp; Next')]'.</msg>
+<arg>${xpath}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-10-22T19:46:35.024050" elapsed="0.039220"/>
+</kw>
+<arg>//*[contains(text(), 'Save &amp; Next')]</arg>
+<status status="PASS" start="2026-10-22T19:46:32.604619" elapsed="2.458782"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-10-22T20:19:55.064596" level="INFO">Slept 33 minutes 20 seconds.</msg>
+<arg>2000s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-10-22T19:46:35.063646" elapsed="2000.003248"/>
+</kw>
+<kw name="Tenant credits" owner="kw2">
+<kw name="Input Text Custom" owner="kw1">
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<msg time="2026-10-22T20:19:55.157182" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: Message: invalid session id
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	(No symbol) [0x7ff60882e745]
+	(No symbol) [0x7ff6083e3d00]
+	(No symbol) [0x7ff608213d36]
+	(No symbol) [0x7ff608260563]
+	(No symbol) [0x7ff6082989e2]
+	(No symbol) [0x7ff6082927a2]
+	(No symbol) [0x7ff608291f23]
+	(No symbol) [0x7ff6081dc8eb]
+	(No symbol) [0x7ff6081dcf52]
+	(No symbol) [0x7ff6081dd585]
+	(No symbol) [0x7ff6088d17b1]
+	(No symbol) [0x7ff6089087c7]
+	(No symbol) [0x7ff6088fc85e]
+	(No symbol) [0x7ff6085a884e]
+	(No symbol) [0x7ff6083f0415]
+	(No symbol) [0x7ff6081dbd1e]
+	(No symbol) [0x7ff608984cff]
+	(No symbol) [0x7fff97b7dda7]
+	(No symbol) [0x7fff9977ee4c]
+</msg>
+<msg time="2026-10-22T20:19:55.165559" level="FAIL">InvalidSessionIdException: Message: invalid session id: session deleted as the browser has closed the connection
+from disconnected: not connected to DevTools
+  (Session info: chrome=155.0.8059.85)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	(No symbol) [0x7ff60882e745]
+	(No symbol) [0x7ff6083e3d00]
+	(No symbol) [0x7ff608213f3d]
+	(No symbol) [0x7ff6081ffc72]
+	(No symbol) [0x7ff608225486]
+	(No symbol) [0x7ff6082a0400]
+	(No symbol) [0x7ff6082c442d]
+	(No symbol) [0x7ff608261462]
+	(No symbol) [0x7ff608262273]
+	(No symbol) [0x7ff6088d17b1]
+	(No symbol) [0x7ff6089087c7]
+	(No symbol) [0x7ff6088fc85e]
+	(No symbol) [0x7ff6085a884e]
+	(No symbol) [0x7ff6083f0415]
+	(No symbol) [0x7ff6083ebdf4]
+	(No symbol) [0x7ff6083ebf84]
+	(No symbol) [0x7ff6083d7f7c]
+	(No symbol) [0x7fff97b7dda7]
+	(No symbol) [0x7fff9977ee4c]
+</msg>
+<arg>${xpath1}</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="FAIL" start="2026-10-22T20:19:55.071307" elapsed="0.102205">InvalidSessionIdException: Message: invalid session id: session deleted as the browser has closed the connection
+from disconnected: not connected to DevTools
+  (Session info: chrome=155.0.8059.85)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	(No symbol) [0x7ff60882e745]
+	(No symbol) [0x7ff6083e3d00]
+	(No symbol) [0x7ff608213f3d]
+	(No symbol) [0x7ff6081ffc72]
+	(No symbol) [0x7ff608225486]
+	(No symbol) [0x7ff6082a0400]
+	(No symbol) [0x7ff6082c442d]
+	(No symbol) [0x7ff608261462]
+	(No symbol) [0x7ff608262273]
+	(No symbol) [0x7ff6088d17b1]
+	(No symbol) [0x7ff6089087c7]
+	(No symbol) [0x7ff6088fc85e]
+	(No symbol) [0x7ff6085a884e]
+	(No symbol) [0x7ff6083f0415]
+	(No symbol) [0x7ff6083ebdf4]
+	(No symbol) [0x7ff6083ebf84]
+	(No symbol) [0x7ff6083d7f7c]
+	(No symbol) [0x7fff97b7dda7]
+	(No symbol) [0x7fff9977ee4c]
+</status>
+</kw>
+<kw name="Wait Until Element Is Enabled" owner="SeleniumLibrary">
+<arg>${xpath1}</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is enabled.</doc>
+<status status="NOT RUN" start="2026-10-22T20:19:55.173693" elapsed="0.000094"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<arg>${xpath1}</arg>
+<arg>${xpath2}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="NOT RUN" start="2026-10-22T20:19:55.173891" elapsed="0.000070"/>
+</kw>
+<arg>(//*[contains(@placeholder, 'e.g. 1000')])[2]</arg>
+<arg>1000</arg>
+<status status="FAIL" start="2026-10-22T20:19:55.069900" elapsed="0.104189">InvalidSessionIdException: Message: invalid session id: session deleted as the browser has closed the connection
+from disconnected: not connected to DevTools
+  (Session info: chrome=155.0.8059.85)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	(No symbol) [0x7ff60882e745]
+	(No symbol) [0x7ff6083e3d00]
+	(No symbol) [0x7ff608213f3d]
+	(No symbol) [0x7ff6081ffc72]
+	(No symbol) [0x7ff608225486]
+	(No symbol) [0x7ff6082a0400]
+	(No symbol) [0x7ff6082c442d]
+	(No symbol) [0x7ff608261462]
+	(No symbol) [0x7ff608262273]
+	(No symbol) [0x7ff6088d17b1]
+	(No symbol) [0x7ff6089087c7]
+	(No symbol) [0x7ff6088fc85e]
+	(No symbol) [0x7ff6085a884e]
+	(No symbol) [0x7ff6083f0415]
+	(No symbol) [0x7ff6083ebdf4]
+	(No symbol) [0x7ff6083ebf84]
+	(No symbol) [0x7ff6083d7f7c]
+	(No symbol) [0x7fff97b7dda7]
+	(No symbol) [0x7fff9977ee4c]
+</status>
+</kw>
+<kw name="Input Text Custom" owner="kw1">
+<arg>(//*[contains(@placeholder, 'e.g. 12 months')])[2]</arg>
+<arg>11</arg>
+<status status="NOT RUN" start="2026-10-22T20:19:55.174243" elapsed="0.000087"/>
+</kw>
+<kw name="Click Element Custom" owner="kw1">
+<arg>//*[contains(text(), 'Initiate Agreement')]</arg>
+<status status="NOT RUN" start="2026-10-22T20:19:55.174601" elapsed="0.000097"/>
+</kw>
+<status status="FAIL" start="2026-10-22T20:19:55.068638" elapsed="0.106170">InvalidSessionIdException: Message: invalid session id: session deleted as the browser has closed the connection
+from disconnected: not connected to DevTools
+  (Session info: chrome=155.0.8059.85)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	(No symbol) [0x7ff60882e745]
+	(No symbol) [0x7ff6083e3d00]
+	(No symbol) [0x7ff608213f3d]
+	(No symbol) [0x7ff6081ffc72]
+	(No symbol) [0x7ff608225486]
+	(No symbol) [0x7ff6082a0400]
+	(No symbol) [0x7ff6082c442d]
+	(No symbol) [0x7ff608261462]
+	(No symbol) [0x7ff608262273]
+	(No symbol) [0x7ff6088d17b1]
+	(No symbol) [0x7ff6089087c7]
+	(No symbol) [0x7ff6088fc85e]
+	(No symbol) [0x7ff6085a884e]
+	(No symbol) [0x7ff6083f0415]
+	(No symbol) [0x7ff6083ebdf4]
+	(No symbol) [0x7ff6083ebf84]
+	(No symbol) [0x7ff6083d7f7c]
+	(No symbol) [0x7fff97b7dda7]
+	(No symbol) [0x7fff9977ee4c]
+</status>
+</kw>
+<kw name="Close All Browsers" owner="SeleniumLibrary">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="NOT RUN" start="2026-10-22T20:19:55.175080" elapsed="0.000124"/>
+</kw>
+<kw name="Close All Browsers" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" start="2026-10-22T20:19:55.175451" elapsed="2.040760"/>
+</kw>
+<status status="FAIL" start="2026-10-22T19:45:09.489499" elapsed="2087.727602">InvalidSessionIdException: Message: invalid session id: session deleted as the browser has closed the connection
+from disconnected: not connected to DevTools
+  (Session info: chrome=155.0.8059.85)
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	(No symbol) [0x7ff60882e745]
+	(No symbol) [0x7ff6083e3d00]
+	(No symbol) [0x7ff608213f3d]
+	(No symbol) [0x7ff6081ffc72]
+	(No symbol) [0x7ff608225486]
+	(No symbol) [0x7ff6082a0400]
+	(No symbol) [0x7ff6082c442d]
+	(No symbol) [0x7ff608261462]
+	(No symbol) [0x7ff608262273]
+	(No symbol) [0x7ff6088d17b1]
+	(No symbol) [0x7ff6089087c7]
+	(No symbol) [0x7ff6088fc85e]
+	(No symbol) [0x7ff6085a884e]
+	(No symbol) [0x7ff6083f0415]
+	(No symbol) [0x7ff6083ebdf4]
+	(No symbol) [0x7ff6083ebf84]
+	(No symbol) [0x7ff6083d7f7c]
+	(No symbol) [0x7fff97b7dda7]
+	(No symbol) [0x7fff9977ee4c]
+</status>
+</test>
+<status status="FAIL" start="2026-10-22T19:45:09.261695" elapsed="2087.974117"/>
+</suite>
+<status status="FAIL" start="2026-10-22T19:45:09.255565" elapsed="2087.986710"/>
+</suite>
+<status status="FAIL" start="2026-10-22T19:45:09.229819" elapsed="2088.016041"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="stageCRM PM" id="s1" pass="0" fail="1" skip="0">stageCRM PM</stat>
+<stat name="Testcases" id="s1-s1" pass="0" fail="1" skip="0">stageCRM PM.Testcases</stat>
+<stat name="Tenant-management2" id="s1-s1-s1" pass="0" fail="1" skip="0">stageCRM PM.Testcases.Tenant-management2</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2026-10-22T20:19:55.157182" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: Message: invalid session id
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	(No symbol) [0x7ff60882e745]
+	(No symbol) [0x7ff6083e3d00]
+	(No symbol) [0x7ff608213d36]
+	(No symbol) [0x7ff608260563]
+	(No symbol) [0x7ff6082989e2]
+	(No symbol) [0x7ff6082927a2]
+	(No symbol) [0x7ff608291f23]
+	(No symbol) [0x7ff6081dc8eb]
+	(No symbol) [0x7ff6081dcf52]
+	(No symbol) [0x7ff6081dd585]
+	(No symbol) [0x7ff6088d17b1]
+	(No symbol) [0x7ff6089087c7]
+	(No symbol) [0x7ff6088fc85e]
+	(No symbol) [0x7ff6085a884e]
+	(No symbol) [0x7ff6083f0415]
+	(No symbol) [0x7ff6081dbd1e]
+	(No symbol) [0x7ff608984cff]
+	(No symbol) [0x7fff97b7dda7]
+	(No symbol) [0x7fff9977ee4c]
+</msg>
+</errors>
+</robot>
