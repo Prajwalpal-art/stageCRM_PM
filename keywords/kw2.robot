@@ -433,4 +433,17 @@ Validate User Credits With Valid Value
     Input Text Custom    ${User_Credits1}    10
     Element Attribute Value Should Be    ${User_Credits1}    value    10
     Page Should Not Contain    The field UserCredits must be between 1 and 2147483647.
-    
+User Credits Mandatory Validation
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type=tel}     ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Input Text Custom    ${Subscription_Duration}    12
+    Click Element Custom    ${Send_Invitation}
+    Wait Until Element Is Visible    //*[contains(text(),'UserCredits')]    10s
+    Element Should Be Visible    //*[contains(text(),'UserCredits')]
+    Element Should Be Visible    ${User_Credits1}
+        

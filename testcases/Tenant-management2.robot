@@ -413,3 +413,7 @@ Verify Valid User Credits Entry in Licensed Tenant Creation
     login to stageCRM
     Invite Tenant Creation
     Validate User Credits With Valid Value     
+Verify User Credits field is mandatory
+    login to stageCRM
+    Invite Tenant Creation
+    User Credits Mandatory Validation    
