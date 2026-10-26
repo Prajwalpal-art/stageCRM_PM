@@ -558,3 +558,4 @@ Validate Zero Subscription Duration
     Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Duration must be between 1 and 2147483647')]    10s
     Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Duration must be between 1 and 2147483647')]
     Element Should Be Visible    ${Subscription_Duration}
+    

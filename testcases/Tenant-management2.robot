@@ -402,46 +402,70 @@ Verify Duplicate Email Validation in Licensed Tenant Creation
     Tenant credits
     Close All Browsers
 Verify Licensed Subscription Selection in Licensed Tenant Creation
+    [Documentation]    IT_LT_020 - Verify the Licensed subscription option can be selected successfully.
+    [Tags]    IT_LT_020    Regression    LicensedTenant
     login to stageCRM
     Invite Tenant Creation
     Licensed subscription type selection validation
+
 Verify Free Trial Deselection When Licensed Subscription is Selected
+    [Documentation]    IT_LT_021 - Verify selecting the Licensed subscription automatically deselects the Free Trial option.
+    [Tags]    IT_LT_021    Regression    LicensedTenant
     login to stageCRM
     Invite Tenant Creation
-    Validate Subscription Selection Behavior  
+    Validate Subscription Selection Behavior
+
 Verify Valid User Credits Entry in Licensed Tenant Creation
+    [Documentation]    IT_LT_022 - Verify the User Credits field accepts a valid positive value.
+    [Tags]    IT_LT_022    Regression    LicensedTenant
     login to stageCRM
     Invite Tenant Creation
-    Validate User Credits With Valid Value     
-Verify User Credits field is mandatory
+    Validate User Credits With Valid Value
+
+Verify User Credits Field Is Mandatory
+    [Documentation]    IT_LT_023 - Verify validation is displayed when the User Credits field is left blank.
+    [Tags]    IT_LT_023    Regression    LicensedTenant
     login to stageCRM
     Invite Tenant Creation
-    User Credits Mandatory Validation    
+    User Credits Mandatory Validation
+
 Verify Decimal Values Are Not Accepted In User Credits
+    [Documentation]    IT_LT_024 - Verify decimal values are rejected in the User Credits field.
+    [Tags]    IT_LT_024    Regression    LicensedTenant
     login to stageCRM
     Invite Tenant Creation
     Validate Decimal User Credits
+
 Verify Negative Values Are Restricted In User Credits
+    [Documentation]    IT_LT_025 - Verify a negative User Credits value is automatically converted to a positive integer.
+    [Tags]    IT_LT_025    Regression    LicensedTenant
     login to stageCRM
     Invite Tenant Creation
-    Validate Negative User Credits    
+    Validate Negative User Credits
+
 Verify Zero Credits Cannot Be Entered
+    [Documentation]    IT_LT_026 - Verify zero is rejected in the User Credits field.
+    [Tags]    IT_LT_026    Regression    LicensedTenant
     login to stageCRM
     Invite Tenant Creation
-    Validate Zero User Credits    
+    Validate Zero User Credits
+
 Verify Valid Subscription Duration Can Be Entered
+    [Documentation]    IT_LT_027 - Verify a valid Subscription Duration of 12 months is accepted successfully.
+    [Tags]    IT_LT_027    Regression    LicensedTenant
     login to stageCRM
     Invite Tenant Creation
     Validate Valid Subscription Duration
+
 Verify Subscription Duration Is Mandatory
     [Documentation]    IT_LT_028 - Verify validation is displayed when Subscription Duration is left blank.
     login to stageCRM
     Invite Tenant Creation
-    Validate Subscription Duration Mandatory Field    
+    Validate Subscription Duration Mandatory Field
+
 Verify Zero Subscription Duration Is Not Accepted
     [Documentation]    IT_LT_029 - Verify zero is rejected in the Subscription Duration field.
     [Tags]    IT_LT_029    Regression    LicensedTenant
-
     login to stageCRM
     Invite Tenant Creation
-    Validate Zero Subscription Duration        
+    Validate Zero Subscription Duration       
