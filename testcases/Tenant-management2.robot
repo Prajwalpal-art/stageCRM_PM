@@ -417,3 +417,31 @@ Verify User Credits field is mandatory
     login to stageCRM
     Invite Tenant Creation
     User Credits Mandatory Validation    
+Verify Decimal Values Are Not Accepted In User Credits
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Decimal User Credits
+Verify Negative Values Are Restricted In User Credits
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Negative User Credits    
+Verify Zero Credits Cannot Be Entered
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Zero User Credits    
+Verify Valid Subscription Duration Can Be Entered
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Valid Subscription Duration
+Verify Subscription Duration Is Mandatory
+    [Documentation]    IT_LT_028 - Verify validation is displayed when Subscription Duration is left blank.
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Subscription Duration Mandatory Field    
+Verify Zero Subscription Duration Is Not Accepted
+    [Documentation]    IT_LT_029 - Verify zero is rejected in the Subscription Duration field.
+    [Tags]    IT_LT_029    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Zero Subscription Duration        

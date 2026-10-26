@@ -446,4 +446,115 @@ User Credits Mandatory Validation
     Wait Until Element Is Visible    //*[contains(text(),'UserCredits')]    10s
     Element Should Be Visible    //*[contains(text(),'UserCredits')]
     Element Should Be Visible    ${User_Credits1}
-        
+Validate Decimal User Credits
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type=tel}     ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Input Text    ${User_Credits1}    10.5
+    Input Text Custom    ${Subscription_Duration}    12
+    ${entered_value}=    Get Element Attribute    ${User_Credits1}    value
+    Log To Console    User Credits value before submission: ${entered_value}
+    Click Element Custom    ${Send_Invitation}  
+    Click Element Custom    ${Send_Invitation}
+    Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'User Credits must be a whole number')]    10s
+    Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'User Credits must be a whole number')]
+    Element Should Be Visible    ${User_Credits1}  
+Validate Negative User Credits
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type_tel}    ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Wait Until Element Is Visible    ${User_Credits1}    10s
+    Click Element    ${User_Credits1}
+    Press Keys    ${User_Credits1}    CTRL+A
+    Press Keys    ${User_Credits1}    BACKSPACE
+    Input Text    ${User_Credits1}    -5
+    ${entered_value}=    Get Element Attribute    ${User_Credits1}    value
+    Log To Console    Entered negative value: -5
+    Log To Console    Actual field value: ${entered_value}
+    Should Be Equal As Strings    ${entered_value}    5    Negative User Credits value was not converted to the expected positive integer.
+Validate Zero User Credits
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type_tel}    ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Wait Until Element Is Visible    ${User_Credits1}    10s
+    Click Element    ${User_Credits1}
+    Press Keys    ${User_Credits1}    CTRL+A
+    Press Keys    ${User_Credits1}    BACKSPACE
+    Input Text    ${User_Credits1}    0
+    Input Text Custom    ${Subscription_Duration}    12
+    ${entered_value}=    Get Element Attribute    ${User_Credits1}    value
+    Log To Console    User Credits test value: ${entered_value}
+    Element Attribute Value Should Be    ${User_Credits1}    value    0
+    Click Element Custom    ${Send_Invitation}
+    Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'UserCredits must be between 1 and 2147483647')]    10s
+    Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'UserCredits must be between 1 and 2147483647')]
+    Element Should Be Visible    ${User_Credits1}
+Validate Valid Subscription Duration
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type_tel}    ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Wait Until Element Is Visible    ${User_Credits1}    10s
+    Input Text Custom    ${User_Credits1}    10
+    Wait Until Element Is Visible    ${Subscription_Duration}    10s
+    Input Text Custom    ${Subscription_Duration}    12
+    Element Attribute Value Should Be    ${Subscription_Duration}    value    12
+    Page Should Not Contain    The field Duration must be between 1 and 2147483647
+    Click Element Custom    ${Send_Invitation}
+    Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]    10s
+    Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')] 
+Validate Subscription Duration Mandatory Field
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type_tel}    ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Wait Until Element Is Visible    ${User_Credits1}    10s
+    Input Text Custom    ${User_Credits1}    10
+    Wait Until Element Is Visible    ${Subscription_Duration}    10s
+    Clear Element Text    ${Subscription_Duration}
+    ${duration_value}=    Get Element Attribute    ${Subscription_Duration}    value
+    Should Be Empty    ${duration_value}    Subscription Duration field should be blank before submission.
+    Click Element Custom    ${Send_Invitation}
+    Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Duration must be between 1 and 2147483647')]    10s
+    Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Duration must be between 1 and 2147483647')]
+    Element Should Be Visible    ${Subscription_Duration}       
+Validate Zero Subscription Duration
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type_tel}    ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Wait Until Element Is Visible    ${User_Credits1}    10s
+    Input Text Custom    ${User_Credits1}    10
+    Wait Until Element Is Visible    ${Subscription_Duration}    10s
+    Click Element    ${Subscription_Duration}
+    Press Keys    ${Subscription_Duration}    CTRL+A
+    Press Keys    ${Subscription_Duration}    BACKSPACE
+    Input Text    ${Subscription_Duration}    0
+    ${duration_value}=    Get Element Attribute    ${Subscription_Duration}    value
+    Log To Console    Subscription Duration test value: ${duration_value}
+    Element Attribute Value Should Be    ${Subscription_Duration}    value    0
+    Click Element Custom    ${Send_Invitation}
+    Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Duration must be between 1 and 2147483647')]    10s
+    Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Duration must be between 1 and 2147483647')]
+    Element Should Be Visible    ${Subscription_Duration}
