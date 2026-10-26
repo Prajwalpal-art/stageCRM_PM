@@ -40,7 +40,6 @@ ${Subscription_Duration1}    (//*[contains(text(), 'Free Trial')])[2]
 ${Wealthmax_Name}    Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers
 ${Licensed_Selected}    //p[normalize-space()='Licensed']/ancestor::div[contains(@class,'cursor-pointer')]//div[contains(@class,'bg-indigo600')]
 ${Free_Trial_Selected}    //p[normalize-space()='Free Trial']/ancestor::div[contains(@class,'cursor-pointer')]//div[contains(@class,'bg-indigo600')]
-
 *** Keywords ***
 Fill Field By Placeholder
     [Arguments]    ${placeholder}    ${value}    ${index}=1
@@ -52,7 +51,6 @@ Fill Field By Placeholder
     Clear Element Text    xpath=${locator}
     Input Text    xpath=${locator}    ${value}
     Sleep    1s
-
 Generate Unique Tenant Data
     [Documentation]    Generates unique values for tenant creation using timestamp
     ${timestamp}=    Evaluate    str(int(__import__('time').time() * 1000))[-8:]
@@ -61,9 +59,8 @@ Generate Unique Tenant Data
     ${company_number}=    Evaluate    '${timestamp}'
     ${company_email}=    Evaluate    'Prajwal.s+' + '${timestamp}' + '@wealthmax.co.uk'
     ${compliance_email}=    Evaluate    'Prajwal.s+' + '${timestamp}' + '01@wealthmax.co.uk'
-    
-    RETURN    ${company_name}    ${company_title}    ${company_number}    ${company_email}    ${compliance_email}
 
+    RETURN    ${company_name}    ${company_title}    ${company_number}    ${company_email}    ${compliance_email}
 Create Tenant 
     ${company_name}    ${company_title}    ${company_number}    ${company_email}    ${compliance_email}=    Generate Unique Tenant Data
     
@@ -90,9 +87,8 @@ Create Tenant2
     Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[1]
     Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
     Click Element Custom    //*[contains(text(), 'Yes')]
-
 Fill Adult DOB
-       Wait Until Element Is Visible    //input[contains(@placeholder,'dd-mm-yyyy')]    10s
+    Wait Until Element Is Visible    //input[contains(@placeholder,'dd-mm-yyyy')]    10s
     Input Text    //input[contains(@placeholder,'dd-mm-yyyy')]    15-01-2005
 Select Document Type
     [Arguments]    ${doc_type}
@@ -102,7 +98,6 @@ Select Document Type1
     [Arguments]    ${doc_type1}
     Click Element Custom    (//*[contains(text(), 'Select Document type')])[2]
     Click Element Custom    xpath=//button[normalize-space()='${doc_type1}']
-
 Click Element With JavaScript
     [Arguments]    ${text_to_find}
     ${js}=    Catenate    const btns = Array.from(document.querySelectorAll('button')); const btn = btns.find(b => b.textContent && b.textContent.includes('${text_to_find}') && window.getComputedStyle(b).display !== 'none'); if(!btn){ return false; } btn.scrollIntoView({behavior:'auto', block:'center', inline:'nearest'}); btn.click(); return true;
@@ -240,7 +235,6 @@ Company Name Maximum Length Validation
     Click Element Custom    ${Manual_Tenant_Creation} 
     Click Element Custom    ${Continue_With_Manual}
     Input Text Custom    (//*[contains(@placeholder, 'Enter company name')])[2]    ${Wealthmax_Name} 
-    # Fill Field By Placeholder    Enter company name    ${company_name}    2
     Fill Field By Placeholder    e.g. Ltd, PLC    ${company_title}    2
     Fill Field By Placeholder    e.g. 12345678    ${company_number}    2
     Fill Field By Placeholder    https://yourcompany.com    https://yourcompany.com    2
@@ -308,7 +302,6 @@ First Name Numeric Character Validation
     Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[1]
     Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
     Click Element Custom    //*[contains(text(), 'Yes')]
-# Fill Adult DOB
 Last Name Mandatory Field Validation
     Input Text Custom    (//*[contains(@placeholder, 'Enter first name')])[2]    Prajwal Pal
     Fill Adult DOB
@@ -415,10 +408,8 @@ Validate Subscription Selection Behavior
     Input Text    xpath=//input[@type='tel']    9797889977
     Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
     Click Element Custom    ${Licensed}
-    # Verify Licensed is selected
     Wait Until Element Is Visible    ${Licensed_Selected}    10s
     Element Should Be Visible    ${Licensed_Selected}
-    # Verify Free Trial is not selected
     ${free_trial_count}=    Get Element Count    ${Free_Trial_Selected}
     Should Be Equal As Integers    ${free_trial_count}    0
 Validate User Credits With Valid Value
@@ -558,4 +549,3 @@ Validate Zero Subscription Duration
     Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Duration must be between 1 and 2147483647')]    10s
     Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Duration must be between 1 and 2147483647')]
     Element Should Be Visible    ${Subscription_Duration}
-    
