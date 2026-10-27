@@ -40,6 +40,13 @@ ${Subscription_Duration1}    (//*[contains(text(), 'Free Trial')])[2]
 ${Wealthmax_Name}    Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers Wealthmax Financial Advisers
 ${Licensed_Selected}    //p[normalize-space()='Licensed']/ancestor::div[contains(@class,'cursor-pointer')]//div[contains(@class,'bg-indigo600')]
 ${Free_Trial_Selected}    //p[normalize-space()='Free Trial']/ancestor::div[contains(@class,'cursor-pointer')]//div[contains(@class,'bg-indigo600')]
+${Auto_Renew_Toggle}    xpath=//app-toggle-reusable[@type='tenant']//button[@role='switch']
+${Auto_Renew_Label}     xpath=//*[normalize-space()='Auto Renew']
+${OUTLOOK_URL}    https://outlook.office.com/mail/
+${OUTLOOK_ALIAS}    OutlookBrowser
+${OUTLOOK_SEARCH}    id=topSearchInput
+${INVITATION_SUBJECT}    Welcome to WealthMax
+${INVITATION_SENDER}    noreply@mg.wealthmaxcommercial.co.uk
 *** Keywords ***
 Fill Field By Placeholder
     [Arguments]    ${placeholder}    ${value}    ${index}=1
@@ -178,6 +185,9 @@ Create Invite Tenant Licenced 1
     Input Text Custom    ${User_Credits1}    50
     Input Text Custom    ${Subscription_Duration}    11
     Click Element Custom    ${Send_Invitation}
+    Log To Console    Invitation sent to: ${company_email2}
+    RETURN    ${company_email2}
+
 Create Invite Tenant Licenced 2
     ${company_name2}    ${First_name2}    ${Last_name2}    ${User_phonenumber}     ${company_email2}=    Generate Unique Tenants Data
     Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
@@ -549,3 +559,263 @@ Validate Zero Subscription Duration
     Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Duration must be between 1 and 2147483647')]    10s
     Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Duration must be between 1 and 2147483647')]
     Element Should Be Visible    ${Subscription_Duration}
+Validate Negative Subscription Duration
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type_tel}    ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Wait Until Element Is Visible    ${User_Credits1}    10s
+    Input Text Custom    ${User_Credits1}    10
+    Wait Until Element Is Visible    ${Subscription_Duration}    10s
+    Click Element    ${Subscription_Duration}
+    Press Keys    ${Subscription_Duration}    CTRL+A
+    Press Keys    ${Subscription_Duration}    BACKSPACE
+    Input Text    ${Subscription_Duration}    -12
+    ${duration_value}=    Get Element Attribute    ${Subscription_Duration}    value
+    Log To Console    Negative duration entered: -12
+    Log To Console    Converted duration value: ${duration_value}
+    Should Be Equal As Strings    ${duration_value}    12   Negative Subscription Duration was not converted to the expected positive value.
+    Click Element Custom    ${Send_Invitation}
+    Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]    10s
+    Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]  
+Validate Auto Renew Default State
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type_tel}    ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Wait Until Element Is Visible    ${Auto_Renew_Toggle}    10s
+    Element Should Be Visible    ${Auto_Renew_Toggle}
+    ${default_state}=    Get Element Attribute    ${Auto_Renew_Toggle}    aria-checked
+    Log To Console    Auto Renew default state: ${default_state}
+    Should Be Equal As Strings    ${default_state}    false    Auto Renew toggle should be OFF by default.
+Validate User Can Enable Auto Renew
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type_tel}    ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Input Text Custom    ${User_Credits1}    10
+    Input Text Custom    ${Subscription_Duration}    12
+    Wait Until Element Is Visible    ${Auto_Renew_Toggle}    10s
+    ${initial_state}=    Get Element Attribute    ${Auto_Renew_Toggle}    aria-checked
+    Log To Console    Auto Renew initial state: ${initial_state}
+    Should Be Equal As Strings    ${initial_state}    false    Auto Renew should be OFF before enabling it.
+    Click Element Custom    ${Auto_Renew_Toggle}
+    Wait Until Keyword Succeeds    5x    1s    Element Attribute Value Should Be    ${Auto_Renew_Toggle}    aria-checked    true
+    ${enabled_state}=    Get Element Attribute    ${Auto_Renew_Toggle}    aria-checked
+    Log To Console    Auto Renew enabled state: ${enabled_state}
+    Should Be Equal As Strings    ${enabled_state}    true    Auto Renew was not enabled successfully.
+    Click Element Custom    ${Send_Invitation}
+    Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]    10s
+    Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]    
+Validate User Can Disable Auto Renew
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type_tel}    ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Input Text Custom    ${User_Credits1}    10
+    Input Text Custom    ${Subscription_Duration}    12
+    Wait Until Element Is Visible    ${Auto_Renew_Toggle}    10s
+    ${initial_state}=    Get Element Attribute    ${Auto_Renew_Toggle}    aria-checked
+    Log To Console    Auto Renew initial state: ${initial_state}
+    Should Be Equal As Strings    ${initial_state}    false    Auto Renew should initially be OFF.
+    # Turn Auto Renew ON
+    Click Element Custom    ${Auto_Renew_Toggle}
+    Wait Until Keyword Succeeds    5x    1s    Element Attribute Value Should Be    ${Auto_Renew_Toggle}    aria-checked    true
+    ${enabled_state}=    Get Element Attribute    ${Auto_Renew_Toggle}    aria-checked
+    Log To Console    Auto Renew enabled state: ${enabled_state}
+    Should Be Equal As Strings    ${enabled_state}    true    Auto Renew could not be enabled before testing the OFF state.
+    # Turn Auto Renew OFF
+    Click Element Custom    ${Auto_Renew_Toggle}
+    Wait Until Keyword Succeeds    5x    1s    Element Attribute Value Should Be    ${Auto_Renew_Toggle}    aria-checked    false
+    ${disabled_state}=    Get Element Attribute    ${Auto_Renew_Toggle}    aria-checked
+    Log To Console    Auto Renew disabled state: ${disabled_state}
+    Should Be Equal As Strings    ${disabled_state}    false    Auto Renew was not disabled successfully.
+    Click Element Custom    ${Send_Invitation}
+    Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]    10s
+    Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]    
+Validate Invitation Is Sent Successfully
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type_tel}    ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Wait Until Element Is Visible    ${User_Credits1}    10s
+    Input Text Custom    ${User_Credits1}    10
+    Wait Until Element Is Visible    ${Subscription_Duration}    10s
+    Input Text Custom    ${Subscription_Duration}    12
+    Click Element Custom    ${Send_Invitation}
+    Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]    10s
+    Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]
+    ${success_message}=    Get Text    xpath=//*[@role='status']
+    Log To Console    Invitation response: ${success_message}
+    Should Contain    ${success_message}    Licensed invite created    
+Validate Mandatory Fields Block Invitation Submission
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type_tel}    ${company_email2}=    Generate Unique Tenants Data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+    Click Element Custom    ${Licensed}
+    Wait Until Element Is Visible    ${User_Credits1}    10s
+    Wait Until Element Is Visible    ${Subscription_Duration}    10s
+    Clear Element Text    ${User_Credits1}
+    Clear Element Text    ${Subscription_Duration}
+    ${credits_value}=    Get Element Attribute    ${User_Credits1}    value
+    ${duration_value}=    Get Element Attribute    ${Subscription_Duration}    value
+    Log To Console    User Credits value: ${credits_value}
+    Log To Console    Subscription Duration value: ${duration_value}
+    Should Be Empty    ${credits_value}    User Credits field should be blank before submission.
+    Should Be Empty    ${duration_value}    Subscription Duration field should be blank before submission.
+    Click Element Custom    ${Send_Invitation}
+    Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Validation failed')]    10s
+    Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'UserCredits')]
+    Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Duration')]
+    Element Should Be Visible    ${User_Credits1}
+    Element Should Be Visible    ${Subscription_Duration}
+
+Handle Outlook Post Login Pages
+    Sleep    3s
+
+    ${stay_signed_in_yes}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath=//input[@id='idSIButton9' and @type='submit']    10s
+
+    IF    ${stay_signed_in_yes}
+        Click Element    xpath=//input[@id='idSIButton9' and @type='submit']
+    END    
+
+Open Outlook Test Mailbox
+    ${outlook_email}=    Get Environment Variable    OUTLOOK_EMAIL    ${EMPTY}
+    ${outlook_password}=    Get Environment Variable    OUTLOOK_PASSWORD    ${EMPTY}
+
+    Should Not Be Empty    ${outlook_email}    OUTLOOK_EMAIL environment variable is not configured.
+    Should Not Be Empty    ${outlook_password}    OUTLOOK_PASSWORD environment variable is not configured.
+
+    ${outlook_options}=    Create Outlook Chrome Options
+
+    Open Browser    ${OUTLOOK_URL}    chrome    alias=${OUTLOOK_ALIAS}    options=${outlook_options}
+
+    Maximize Browser Window
+
+
+    ${email_page_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    id=i0116    20s
+
+    IF    ${email_page_visible}
+        Input Text    id=i0116    ${outlook_email}
+        Press Keys    id=i0116    ENTER
+
+        Wait Until Element Is Visible    id=i0118    20s
+        Wait Until Element Is Enabled    id=i0118    20s
+
+        Set Log Level    NONE
+        Input Password    id=i0118    ${outlook_password}
+        Set Log Level    INFO
+
+        Press Keys    id=i0118    ENTER
+    END
+
+    Handle Outlook Post Login Pages
+
+    Wait Until Element Is Visible    ${OUTLOOK_SEARCH}    60s
+    Element Should Be Visible    ${OUTLOOK_SEARCH}
+
+    Log To Console    Outlook mailbox opened successfully.
+
+
+Send Licensed Tenant Invitation For Email Validation
+    ${company_name2}    ${First_name2}    ${Last_name2}    ${type_tel}    ${company_email2}=    Generate Unique Tenants Data
+
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company_name2}    2
+    Fill Field By Placeholders    e.g. Steve    ${First_name2}    2
+    Fill Field By Placeholders    e.g. Smith    ${Last_name2}    2
+
+    Input Text    xpath=//input[@type='tel']    9797889977
+
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${company_email2}    2
+
+    Click Element Custom    ${Licensed}
+
+    Wait Until Element Is Visible    ${User_Credits1}    10s
+    Input Text Custom    ${User_Credits1}    10
+
+    Wait Until Element Is Visible    ${Subscription_Duration}    10s
+    Input Text Custom    ${Subscription_Duration}    12
+
+    Click Element Custom    ${Send_Invitation}
+
+    Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]    15s
+
+    Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]
+
+    Log To Console    Invitation sent successfully to: ${company_email2}
+
+    RETURN    ${company_email2}
+
+
+Search Invitation Email In Outlook
+    [Arguments]    ${recipient_email}=${EMPTY}
+
+    Wait Until Element Is Visible    ${OUTLOOK_SEARCH}    30s
+    Wait Until Element Is Enabled    ${OUTLOOK_SEARCH}    30s
+
+    Click Element    ${OUTLOOK_SEARCH}
+    Press Keys    ${OUTLOOK_SEARCH}    CTRL+A
+    Press Keys    ${OUTLOOK_SEARCH}    BACKSPACE
+
+    IF    not $recipient_email
+        ${search_query}=    Set Variable    ${INVITATION_SUBJECT}
+        Press Keys    ${OUTLOOK_SEARCH}    ${search_query}
+    ELSE
+        Should Contain    ${recipient_email}    +    Generated invitation email should contain plus addressing.
+
+        @{email_parts}=    Split String    ${recipient_email}    +    1
+        ${email_prefix}=    Set Variable    ${email_parts}[0]
+        ${email_suffix}=    Set Variable    ${email_parts}[1]
+
+        Log To Console    Email prefix: ${email_prefix}
+        Log To Console    Email suffix: ${email_suffix}
+
+        Press Keys    ${OUTLOOK_SEARCH}    ${email_prefix}
+        Press Keys    ${OUTLOOK_SEARCH}    SHIFT+=
+        Press Keys    ${OUTLOOK_SEARCH}    ${email_suffix}
+
+        ${search_query}=    Set Variable    ${recipient_email}
+    END
+
+    
+    ${actual_search_value}=    Get Element Attribute    ${OUTLOOK_SEARCH}    value
+
+    Log To Console    Expected Outlook search: ${search_query}
+    Log To Console    Actual Outlook search: ${actual_search_value}
+
+    Should Be Equal As Strings    ${actual_search_value}    ${search_query}    Outlook search did not retain the complete plus-addressed email.
+
+    Press Keys    ${OUTLOOK_SEARCH}    ENTER
+
+    Wait Until Page Contains    ${INVITATION_SUBJECT}    30s
+    Page Should Contain    ${INVITATION_SUBJECT}
+
+    Capture Page Screenshot    outlook-search-results.png
+
+    Log To Console    WealthMax invitation email found successfully for: ${recipient_email}
+
+Create Outlook Chrome Options
+    ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
+
+    Evaluate    $options.add_argument("--user-data-dir=C:/Automation/OutlookChromeProfile")
+    Evaluate    $options.add_argument("--start-maximized")
+
+    RETURN    ${options}

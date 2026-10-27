@@ -460,3 +460,69 @@ Verify Zero Subscription Duration Is Not Accepted
     login to stageCRM
     Invite Tenant Creation
     Validate Zero Subscription Duration       
+Verify Negative Subscription Duration Is Not Accepted
+    [Documentation]    IT_LT_030 - Verify negative values are not accepted in the Subscription Duration field.
+    [Tags]    IT_LT_030    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Negative Subscription Duration     
+Verify Auto Renew Toggle Default State
+    [Documentation]    IT_LT_031 - Verify the Auto Renew toggle is OFF by default.
+    [Tags]    IT_LT_031    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Auto Renew Default State  
+Verify User Can Enable Auto Renew
+    [Documentation]    IT_LT_032 - Verify the user can enable Auto Renew and save the selection successfully.
+    [Tags]    IT_LT_032    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate User Can Enable Auto Renew
+Verify User Can Disable Auto Renew
+    [Documentation]    IT_LT_033 - Verify the user can disable Auto Renew and save the selection successfully.
+    [Tags]    IT_LT_033    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate User Can Disable Auto Renew
+Verify Invitation Can Be Sent Successfully
+    [Documentation]    IT_LT_034 - Verify a Licensed Tenant invitation can be sent successfully using valid mandatory field values.
+    [Tags]    IT_LT_034    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Invitation Is Sent Successfully
+Verify Invitation Submission Is Blocked When Mandatory Fields Are Blank
+    [Documentation]    IT_LT_035 - Verify invitation submission is blocked when mandatory fields are left blank.
+    [Tags]    IT_LT_035    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Mandatory Fields Block Invitation Submission
+
+Verify Outlook Mailbox Can Be Opened
+    [Documentation]    Verify Selenium can log in and open the Outlook test mailbox.
+    [Tags]    OutlookLogin
+
+    Open Outlook Test Mailbox
+Verify Outlook Invitation Email Search
+    [Documentation]    Verify an existing WealthMax invitation email can be found in Outlook.
+    [Tags]    OutlookSearch
+
+    Open Outlook Test Mailbox
+    Search Invitation Email In Outlook    
+Verify Invitation Email Is Received
+    [Documentation]    IT_LT_036 - Verify the invitation email is delivered to the recipient Outlook mailbox within the expected timeframe.
+    [Tags]    IT_LT_036    Regression    LicensedTenant    Email
+
+    login to stageCRM
+    Invite Tenant Creation
+
+    ${invited_email}=    Create Invite Tenant Licenced 1
+
+    Open Outlook Test Mailbox
+
+    Wait Until Keyword Succeeds    3 min    15 sec    Search Invitation Email In Outlook    ${invited_email}   

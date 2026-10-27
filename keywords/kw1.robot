@@ -3,6 +3,7 @@ Library    SeleniumLibrary
 Library    OperatingSystem
 Library    Process
 Library    ImapLibrary
+Library    String
 
 *** Variables ***
 ${URL}    https://www.youtube.com
