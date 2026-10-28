@@ -1072,3 +1072,67 @@ Validate Trailing Spaces Removed After Submission
     Should Be Equal As Strings    ${stored_company}     ${expected_company}    Company Name trailing spaces were not removed before storage.
     Log To Console    Stored company name: [${stored_company}]
     Log To Console    Trailing spaces were removed before storing the Company Name.
+
+Get Onboarding Link From Invitation Email
+    ${onboarding_link}=    Set Variable    xpath=//a[contains(@href,'/set-password?token=')]
+
+    Wait Until Element Is Visible    ${onboarding_link}    30s
+    Element Should Be Visible    ${onboarding_link}
+
+    Set Log Level    NONE
+
+    ${onboarding_url}=    Get Element Attribute    ${onboarding_link}    href
+
+    ${valid_link}=    Evaluate    $onboarding_url.startswith("https://stg.crm.wealthmax.co.uk/set-password?token=") and len($onboarding_url.split("token=", 1)[1]) > 0
+
+    ${link_hash}=    Evaluate    __import__('hashlib').sha256($onboarding_url.encode()).hexdigest()
+
+    Set Log Level    INFO
+
+    Should Be True    ${valid_link}    Invitation email does not contain a valid secure onboarding link.
+
+    Log To Console    Secure onboarding link validated successfully.
+
+    RETURN    ${link_hash}
+
+Search Second Invitation Email In Outlook
+    [Arguments]    ${recipient_email}
+
+    # Close the previous active Outlook search using the back arrow
+    ${close_search_button}=    Set Variable    xpath=//*[@id='topSearchInput']/preceding::button[1]
+
+    Wait Until Element Is Visible    ${close_search_button}    15s
+    Click Element    ${close_search_button}
+
+    # Wait until Outlook returns to the normal mailbox search state
+    Wait Until Element Is Visible    ${OUTLOOK_SEARCH}    30s
+    Wait Until Element Is Enabled    ${OUTLOOK_SEARCH}    30s
+
+    Click Element    ${OUTLOOK_SEARCH}
+    Press Keys    ${OUTLOOK_SEARCH}    CTRL+A
+    Press Keys    ${OUTLOOK_SEARCH}    BACKSPACE
+
+    Wait Until Keyword Succeeds    5x   1s    Element Attribute Value Should Be   ${OUTLOOK_SEARCH}    value    ${EMPTY}
+
+    # Enter the second plus-addressed email
+    @{email_parts}=    Split String    ${recipient_email}    +    1
+    ${email_prefix}=    Set Variable    ${email_parts}[0]
+    ${email_suffix}=    Set Variable    ${email_parts}[1]
+
+    Press Keys    ${OUTLOOK_SEARCH}    ${email_prefix}
+    Press Keys    ${OUTLOOK_SEARCH}    SHIFT+=
+    Press Keys    ${OUTLOOK_SEARCH}    ${email_suffix}
+
+    ${actual_search}=    Get Element Attribute   ${OUTLOOK_SEARCH}    value
+
+    Log To Console    Expected second Outlook search: ${recipient_email}
+    Log To Console    Actual second Outlook search: ${actual_search}
+
+    Should Be Equal As Strings    ${actual_search}    ${recipient_email}    Outlook search did not retain the complete second recipient email.
+
+    Press Keys    ${OUTLOOK_SEARCH}    ENTER
+
+    Wait Until Page Contains    ${INVITATION_SUBJECT}    30s
+    Page Should Contain    ${INVITATION_SUBJECT}
+
+    Log To Console    Second invitation email found for: ${recipient_email}    

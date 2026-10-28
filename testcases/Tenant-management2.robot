@@ -579,3 +579,36 @@ Verify Trailing Spaces Are Trimmed
     login to stageCRM
     Invite Tenant Creation
     Validate Trailing Spaces Removed After Submission    
+   
+Verify Unique Invitation Link Generation
+    [Documentation]    IT_LT_044 - Verify each invitation generates a unique secure onboarding link.
+    [Tags]    IT_LT_044    Regression    LicensedTenant    Email
+
+    login to stageCRM
+    Invite Tenant Creation
+
+    ${first_email}=    Create Invite Tenant Licenced 1
+
+    Open Outlook Test Mailbox
+
+    Wait Until Keyword Succeeds    3 min    15 sec    Search Invitation Email In Outlook    ${first_email}
+
+    Open And Inspect WealthMax Invitation Email    ${first_email}
+    ${first_link}=    Get Onboarding Link From Invitation Email
+
+    Switch Browser    1
+    Invite Tenant Creation
+
+    ${second_email}=    Create Invite Tenant Licenced 1
+
+    Switch Browser    ${OUTLOOK_ALIAS}
+
+    Wait Until Keyword Succeeds    3 min    15 sec    Search Second Invitation Email In Outlook    ${second_email}
+
+    Open And Inspect WealthMax Invitation Email    ${second_email}
+    ${second_link}=    Get Onboarding Link From Invitation Email
+
+    Should Not Be Equal As Strings    ${first_link}    ${second_link}    Both invitations generated the same onboarding link.
+
+    Log To Console    Both onboarding links are secure.
+    Log To Console    Unique invitation link generation validated successfully.    
