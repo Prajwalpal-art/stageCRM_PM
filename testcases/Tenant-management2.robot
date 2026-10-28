@@ -526,3 +526,56 @@ Verify Invitation Email Is Received
     Open Outlook Test Mailbox
 
     Wait Until Keyword Succeeds    3 min    15 sec    Search Invitation Email In Outlook    ${invited_email}   
+Verify Invitation Email Content
+    [Documentation]    IT_LT_037 - Verify the received invitation email contains the correct onboarding link and invitation details.
+    [Tags]    IT_LT_037    Regression    LicensedTenant    Email
+
+    login to stageCRM
+    Invite Tenant Creation
+
+    ${invited_email}=    Create Invite Tenant Licenced 1
+
+    Should Contain    ${invited_email}    +    Invitation email should use plus addressing.
+
+    Log To Console    Generated invitation recipient: ${invited_email}
+
+    Open Outlook Test Mailbox
+
+    Wait Until Keyword Succeeds    3 min    15 sec    Search Invitation Email In Outlook    ${invited_email}
+
+    Open And Inspect WealthMax Invitation Email    ${invited_email} 
+Verify Cancel Button Closes Invitation Popup
+    [Documentation]    IT_LT_038 - Verify the Cancel button closes the Invitation popup without saving data.
+    [Tags]    IT_LT_038    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Cancel Button Closes Invitation Popup    
+Verify X Icon Closes Invitation Popup
+    [Documentation]    IT_LT_039 - Verify the X icon closes the Invitation popup without saving data.
+    [Tags]    IT_LT_039    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate X Icon Closes Invitation Popup    
+Verify Entered Data Is Retained After Validation Errors
+    [Documentation]    IT_LT_040 - Verify entered data remains intact after an email validation error.
+    [Tags]    IT_LT_040    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Data Retained After Email Error    
+Verify Leading Spaces Are Trimmed
+    [Documentation]    IT_LT_041 - Verify leading spaces are automatically removed from the Company Name field.
+    [Tags]    IT_LT_041    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Leading Spaces Are Trimmed    
+Verify Trailing Spaces Are Trimmed
+    [Documentation]    IT_LT_042 - Verify trailing spaces are removed before the Company Name is stored.
+    [Tags]    IT_LT_042    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Trailing Spaces Removed After Submission    

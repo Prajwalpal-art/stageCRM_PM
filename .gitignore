@@ -17,3 +17,6 @@ credentials.robot
 # Python cache
 __pycache__/
 *.pyc
+
+# RobotCode cache
+.robotcode_cache/

@@ -47,6 +47,14 @@ ${OUTLOOK_ALIAS}    OutlookBrowser
 ${OUTLOOK_SEARCH}    id=topSearchInput
 ${INVITATION_SUBJECT}    Welcome to WealthMax
 ${INVITATION_SENDER}    noreply@mg.wealthmaxcommercial.co.uk
+${INVITATION_EMAIL_RESULT}    xpath=(//*[contains(normalize-space(.),'Welcome to WealthMax')])[last()]
+${INVITATION_POPUP}    xpath=//*[contains(@placeholder,'e.g. Wealthmax Financial Advisers')][2]/ancestor::*[@role='dialog'][1]
+${INVITATION_CANCEL}    xpath=(//button[normalize-space()='Cancel' or .//*[normalize-space()='Cancel']])[last()]
+${INVITE_COMPANY_NAME_FIELD}    xpath=(//*[contains(@placeholder,'e.g. Wealthmax Financial Advisers')])[2]
+${INVITATION_CANCEL_BUTTON}    xpath=(//button[normalize-space()='Cancel' or .//*[normalize-space()='Cancel']])[last()]
+${INVITATION_CLOSE_ICON}    //*[contains(@aria-label, "Close popup")]
+
+
 *** Keywords ***
 Fill Field By Placeholder
     [Arguments]    ${placeholder}    ${value}    ${index}=1
@@ -819,3 +827,248 @@ Create Outlook Chrome Options
     Evaluate    $options.add_argument("--start-maximized")
 
     RETURN    ${options}
+
+Open And Inspect WealthMax Invitation Email
+    [Arguments]    ${recipient_email}
+
+    # Locate and open the invitation email
+    Wait Until Element Is Visible    ${INVITATION_EMAIL_RESULT}    30s
+    Scroll Element Into View    ${INVITATION_EMAIL_RESULT}
+    Click Element    ${INVITATION_EMAIL_RESULT}
+
+    # Wait until the email content is opened
+    Wait Until Page Contains    Complete Your Onboarding    30s
+
+    # Verify the email subject
+    Page Should Contain    ${INVITATION_SUBJECT}
+
+    # Verify the recipient using a case-insensitive locator
+    ${recipient_email_lower}=    Convert To Lower Case    ${recipient_email}
+
+    ${recipient_locator}=    Set Variable    xpath=//*[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'${recipient_email_lower}')]
+
+    Wait Until Element Is Visible    ${recipient_locator}    30s
+    Element Should Be Visible    ${recipient_locator}
+
+    Log To Console    Invitation recipient validated successfully: ${recipient_email}
+
+    # Verify the onboarding heading and greeting
+    Page Should Contain    Complete Your Onboarding
+    Page Should Contain    Hi Prajwal Pal
+
+    # Verify the invitation description
+    Page Should Contain    You have been invited to onboard onto the WealthMax platform.
+
+    Page Should Contain    Click the button below to set your password and activate your account.
+
+    # Verify the activation instructions
+    Page Should Contain    Activate your account
+    Page Should Contain    Set Your Password
+    Page Should Contain    This link will expire
+
+    # Verify the required onboarding steps
+    Page Should Contain    Next Steps:
+    Page Should Contain    Company Information and Documents
+    Page Should Contain    Admin Details and Verification
+    Page Should Contain    Conduct Check Declaration
+    Page Should Contain    Submit your application for review.
+
+    # Verify that a secure, non-empty password setup link exists.
+    
+    ${secure_onboarding_link}=    Set Variable    xpath=//a[starts-with(@href,'https://stg.crm.wealthmax.co.uk/set-password?token=') and string-length(substring-after(@href,'token=')) > 0]
+
+    Wait Until Element Is Visible    ${secure_onboarding_link}    30s
+    Element Should Be Visible    ${secure_onboarding_link}
+
+    # Safe logging only
+    Log To Console    Invitation email opened successfully.
+    Log To Console    Invitation subject validated successfully.
+    Log To Console    Invitation recipient validated successfully: ${recipient_email}
+    Log To Console    Invitation onboarding details validated successfully.
+    Log To Console    Secure password setup link validated successfully.  
+
+Validate Cancel Button Closes Invitation Popup
+    ${generated_company_name}    ${generated_first_name}    ${generated_last_name}    ${generated_mobile}    ${generated_email}=    Generate Unique Tenants Data
+
+    # Verify the Invitation form is displayed
+    Wait Until Element Is Visible    ${INVITE_COMPANY_NAME_FIELD}    15s
+    Wait Until Element Is Visible    ${INVITATION_CANCEL_BUTTON}    15s
+
+    # Enter sample data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${generated_company_name}    2
+
+    Fill Field By Placeholders    e.g. Steve    ${generated_first_name}    2
+
+    Fill Field By Placeholders    e.g. Smith    ${generated_last_name}    2
+
+    Input Text    xpath=//input[@type='tel']    9797889977
+
+    Fill Field By Placeholder    e.g. abc.def@gmail.com     ${generated_email}    2
+
+    Log To Console    Sample invitation data entered for: ${generated_email}
+
+    # Click Cancel without submitting
+    Click Element Custom    ${INVITATION_CANCEL_BUTTON}
+
+    # Verify the Invitation form is closed
+    Wait Until Element Is Not Visible    ${INVITE_COMPANY_NAME_FIELD}    15s
+    Page Should Not Contain Element    ${INVITE_COMPANY_NAME_FIELD}
+
+    # Verify Send Invitation is no longer displayed
+    Page Should Not Contain Element    ${Send_Invitation}
+
+    # Verify the user returned to the previous screen
+    Wait Until Page Contains    Create Tenant    15s
+    Page Should Contain    Create Tenant
+
+    # Verify that no invitation was created
+    Page Should Not Contain    Licensed invite created
+
+    Log To Console    Invitation popup closed successfully.
+    Log To Console    No invitation was submitted or saved.
+    Log To Console    User returned to the previous Create Tenant screen.
+
+Validate X Icon Closes Invitation Popup
+    ${generated_company_name}    ${generated_first_name}    ${generated_last_name}    ${generated_mobile}    ${generated_email}=    Generate Unique Tenants Data
+
+    # Verify the Invitation form is displayed
+    Wait Until Element Is Visible    ${INVITE_COMPANY_NAME_FIELD}    15s
+    Wait Until Element Is Visible    ${INVITATION_CLOSE_ICON}    15s
+
+    # Enter sample data
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${generated_company_name}    2
+
+    Fill Field By Placeholders    e.g. Steve    ${generated_first_name}    2
+
+    Fill Field By Placeholders    e.g. Smith    ${generated_last_name}    2
+
+    Input Text    xpath=//input[@type='tel']    9797889977
+
+    Fill Field By Placeholder    e.g. abc.def@gmail.com     ${generated_email}    2
+
+    Log To Console    Sample invitation data entered for: ${generated_email}
+
+    # Close the popup using the X icon
+    Scroll Element Into View    ${INVITATION_CLOSE_ICON}
+    Click Element    ${INVITATION_CLOSE_ICON}
+
+    # Verify the Invitation form is closed
+    Wait Until Element Is Not Visible    ${INVITE_COMPANY_NAME_FIELD}    15s
+    Page Should Not Contain Element    ${INVITE_COMPANY_NAME_FIELD}
+
+    
+    # Verify that the invitation submission controls are no longer displayed
+    Page Should Not Contain Element    ${Send_Invitation}
+
+    # Verify the user returned to the previous screen
+    Wait Until Page Contains    Create Tenant    15s
+    Page Should Contain    Create Tenant
+
+    # Verify that no invitation was created
+    Page Should Not Contain    Licensed invite created
+
+    Log To Console    Invitation popup closed successfully using the X icon.
+    Log To Console    No invitation was submitted or saved.
+    Log To Console    User returned to the previous Create Tenant screen without errors.
+
+Validate Data Retained After Email Error
+    ${company}    ${first_name}    ${last_name}    ${mobile}    ${email}=    Generate Unique Tenants Data
+
+    ${invalid_email}=    Set Variable    admin
+    ${phone}=    Set Variable    9797889977
+
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company}    2
+    Fill Field By Placeholders    e.g. Steve    ${first_name}    2
+    Fill Field By Placeholders    e.g. Smith    ${last_name}    2
+    Input Text    xpath=//input[@type='tel']    ${phone}
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${invalid_email}    2
+
+    Click Element Custom    ${Licensed}
+    Input Text Custom    ${User_Credits1}    10
+    Input Text Custom    ${Subscription_Duration}    12
+
+    Click Element Custom    ${Send_Invitation}
+
+    Wait Until Page Contains    Please enter a valid email address.    10s
+    Page Should Contain    Please enter a valid email address.
+
+    Element Attribute Value Should Be    ${company_name2}    value    ${company}
+    Element Attribute Value Should Be    ${First_name2}    value    ${first_name}
+    Element Attribute Value Should Be    ${Last_name2}    value    ${last_name}
+    ${actual_phone}=    Get Element Attribute    xpath=//input[@type='tel']    value
+    ${actual_phone_without_spaces}=    Remove String    ${actual_phone}    ${SPACE}
+
+    Should Be Equal As Strings    ${actual_phone_without_spaces}    ${phone}     Phone number was not retained correctly after the email validation error.
+
+    Element Attribute Value Should Be    ${company_email2}    value    ${invalid_email}
+    Element Attribute Value Should Be    ${User_Credits1}    value    10
+    Element Attribute Value Should Be    ${Subscription_Duration}    value    12
+
+    Element Should Be Visible    ${company_email2}
+    Page Should Not Contain    Licensed invite created
+
+    Log To Console    Email validation displayed successfully.
+    Log To Console    Form submission was blocked successfully.
+    Log To Console    Previously entered valid data was retained successfully.    
+
+Validate Leading Spaces Are Trimmed
+    ${timestamp}=    Evaluate    str(int(__import__('time').time()))
+    ${expected_company}=    Set Variable    Test Company ${timestamp}
+    ${input_company}=    Catenate    SEPARATOR=    ${SPACE}${SPACE}${SPACE}    ${expected_company}
+
+    ${company}    ${first_name}    ${last_name}    ${mobile}    ${email}=    Generate Unique Tenants Data
+
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${input_company}    2
+    Fill Field By Placeholders    e.g. Steve    ${first_name}    2
+    Fill Field By Placeholders    e.g. Smith    ${last_name}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${email}    2
+
+    Click Element Custom    ${Licensed}
+    Input Text Custom    ${User_Credits1}    10
+    Input Text Custom    ${Subscription_Duration}    12
+
+    Click Element Custom    ${Send_Invitation}
+
+    Wait Until Element Is Visible     xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]     15s
+
+    Element Should Be Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]
+
+    Log To Console    Entered company name: [${input_company}]
+    Log To Console    Expected stored company name: [${expected_company}]
+
+    Log To Console    Invitation submitted successfully.   
+    Wait Until Page Contains    ${expected_company}    20s
+
+    ${stored_company}=    Get Text    xpath=//*[normalize-space()='${expected_company}']
+    Should Be Equal As Strings    ${stored_company}     ${expected_company}     Company Name was not trimmed before being stored.
+    Log To Console    Stored company name: [${stored_company}]
+    Log To Console    Leading spaces were removed before storing the Company Name.
+
+Validate Trailing Spaces Removed After Submission
+    ${timestamp}=    Evaluate    str(int(__import__('time').time()))
+    ${expected_company}=    Set Variable    Test Company ${timestamp}
+    ${input_company}=    Catenate    SEPARATOR=    ${expected_company}    ${SPACE}${SPACE}${SPACE}
+
+    ${company}    ${first_name}    ${last_name}    ${mobile}    ${email}=    Generate Unique Tenants Data
+
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${input_company}    2
+    Fill Field By Placeholders    e.g. Steve    ${first_name}    2
+    Fill Field By Placeholders    e.g. Smith    ${last_name}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${email}    2
+
+    Click Element Custom    ${Licensed}
+    Input Text Custom    ${User_Credits1}    10
+    Input Text Custom    ${Subscription_Duration}    12
+
+    Click Element Custom    ${Send_Invitation}
+    Wait Until Element Is Visible     xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]     15s
+    Log To Console    Entered company name: [${input_company}]
+    Log To Console    Expected stored company name: [${expected_company}]
+    Log To Console    Invitation submitted successfully.
+    Wait Until Page Contains    ${expected_company}    20s
+    ${stored_company}=    Get Text    xpath=(//*[normalize-space()='${expected_company}'])[1]
+    Should Be Equal As Strings    ${stored_company}     ${expected_company}    Company Name trailing spaces were not removed before storage.
+    Log To Console    Stored company name: [${stored_company}]
+    Log To Console    Trailing spaces were removed before storing the Company Name.
