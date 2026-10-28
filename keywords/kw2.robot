@@ -1136,3 +1136,4 @@ Search Second Invitation Email In Outlook
     Page Should Contain    ${INVITATION_SUBJECT}
 
     Log To Console    Second invitation email found for: ${recipient_email}    
+    sleep    5s
