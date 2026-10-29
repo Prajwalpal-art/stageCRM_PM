@@ -578,7 +578,14 @@ Verify Trailing Spaces Are Trimmed
 
     login to stageCRM
     Invite Tenant Creation
-    Validate Trailing Spaces Removed After Submission    
+    Validate Trailing Spaces Removed After Submission 
+Verify Existing Tenant Cannot Be Invited Again
+    [Documentation]    IT_LT_043 - Verify an existing tenant cannot be invited again.
+    [Tags]    IT_LT_043    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Existing Tenant Cannot Be Invited Again       
    
 Verify Unique Invitation Link Generation
     [Documentation]    IT_LT_044 - Verify each invitation generates a unique secure onboarding link.
@@ -611,4 +618,33 @@ Verify Unique Invitation Link Generation
     Should Not Be Equal As Strings    ${first_link}    ${second_link}    Both invitations generated the same onboarding link.
 
     Log To Console    Both onboarding links are secure.
-    Log To Console    Unique invitation link generation validated successfully.    
+    Log To Console    Unique invitation link generation validated successfully. 
+Verify Form Displays Correctly On Different Screen Sizes
+    [Documentation]    IT_LT_045 - Verify the invitation form displays correctly on Desktop, Tablet and Mobile resolutions.
+    [Tags]    IT_LT_045    Regression    LicensedTenant    Responsive
+
+    login to stageCRM
+    Invite Tenant Creation
+    Verify Invitation Form Responsive Layout       
+Verify Keyboard Tab Navigation
+    [Documentation]    IT_LT_046 - Verify keyboard focus moves sequentially through all invitation form fields and controls.
+    [Tags]    IT_LT_046    Regression    LicensedTenant    Accessibility
+
+    login to stageCRM
+    Invite Tenant Creation
+    Verify Invitation Form Keyboard Tab Navigation    
+    
+Verify Form Behavior On Enter Key
+    [Documentation]    IT_LT_047 - Verify the invitation form submits on Enter with valid data and is blocked with validation messages for invalid data.
+    [Tags]    IT_LT_047    Regression    LicensedTenant
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Form Behavior On Enter Key    
+Verify Script Tags Are Rejected
+    [Documentation]    IT_LT_048 - Verify script tags are rejected or sanitized and no script content executes.
+    [Tags]    IT_LT_048    Regression    LicensedTenant    Security
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate Script Tags Are Rejected    

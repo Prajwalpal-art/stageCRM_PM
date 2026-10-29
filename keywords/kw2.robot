@@ -48,7 +48,7 @@ ${OUTLOOK_SEARCH}    id=topSearchInput
 ${INVITATION_SUBJECT}    Welcome to WealthMax
 ${INVITATION_SENDER}    noreply@mg.wealthmaxcommercial.co.uk
 ${INVITATION_EMAIL_RESULT}    xpath=(//*[contains(normalize-space(.),'Welcome to WealthMax')])[last()]
-${INVITATION_POPUP}    xpath=//*[contains(@placeholder,'e.g. Wealthmax Financial Advisers')][2]/ancestor::*[@role='dialog'][1]
+${INVITATION_POPUP}     xpath=(//input[contains(@placeholder,'e.g. Wealthmax Financial Advisers')])[2]/ancestor::*[.//button[contains(normalize-space(.),'Send Invitation')]][1]
 ${INVITATION_CANCEL}    xpath=(//button[normalize-space()='Cancel' or .//*[normalize-space()='Cancel']])[last()]
 ${INVITE_COMPANY_NAME_FIELD}    xpath=(//*[contains(@placeholder,'e.g. Wealthmax Financial Advisers')])[2]
 ${INVITATION_CANCEL_BUTTON}    xpath=(//button[normalize-space()='Cancel' or .//*[normalize-space()='Cancel']])[last()]
@@ -1136,4 +1136,194 @@ Search Second Invitation Email In Outlook
     Page Should Contain    ${INVITATION_SUBJECT}
 
     Log To Console    Second invitation email found for: ${recipient_email}    
-    sleep    5s
+
+Validate Existing Tenant Cannot Be Invited Again
+    ${company}    ${first_name}    ${last_name}    ${mobile}    ${email}=    Generate Unique Tenants Data
+
+    # Create the first invitation
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company}    2
+    Fill Field By Placeholders    e.g. Steve    ${first_name}    2
+    Fill Field By Placeholders    e.g. Smith    ${last_name}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${email}    2
+
+    Click Element Custom    ${Licensed}
+    Input Text Custom    ${User_Credits1}    10
+    Input Text Custom    ${Subscription_Duration}    12
+    Click Element Custom    ${Send_Invitation}
+
+    # Verify the first invitation was created successfully
+    Wait Until Page Contains    Licensed invite created    15s
+    Page Should Contain    Licensed invite created
+
+    # Open the invitation form again
+    Invite Tenant Creation
+
+    # Attempt another invitation using the same details
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company}    2
+    Fill Field By Placeholders    e.g. Steve    ${first_name}    2
+    Fill Field By Placeholders    e.g. Smith    ${last_name}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${email}    2
+
+    Click Element Custom    ${Licensed}
+    Input Text Custom    ${User_Credits1}    10
+    Input Text Custom    ${Subscription_Duration}    12
+    Click Element Custom    ${Send_Invitation}
+
+    # Verify the duplicate invitation is blocked
+    Wait Until Page Contains    Admin email already registered.    15s
+    Page Should Contain    Admin email already registered.
+    Page Should Contain    CONFLICT
+
+    # Verify the invitation form remains open
+    Element Should Be Visible    ${Send_Invitation}
+    Element Should Be Visible    ${company_email2}
+
+    # Verify the duplicate company name remains intact
+    Element Attribute Value Should Be     ${company_name2}     value     ${company}
+
+    # Verify the duplicate email remains intact, ignoring letter case
+    ${actual_email}=    Get Element Attribute     ${company_email2}    value
+
+    ${expected_email_lower}=    Convert To Lower Case    ${email}
+    ${actual_email_lower}=    Convert To Lower Case    ${actual_email}
+
+    Should Be Equal As Strings     ${actual_email_lower}     ${expected_email_lower}     Duplicate tenant email was not retained correctly.
+
+    Log To Console    Duplicate invitation was prevented successfully.
+    Log To Console    Duplicate validation response: Admin email already registered.
+    Log To Console    No new invitation was generated.
+    
+Verify Invitation Form Keyboard Tab Navigation
+    Wait Until Element Is Visible    ${company_name2}    15s
+    Click Element Custom    ${Licensed}
+    Wait Until Element Is Visible    ${Subscription_Duration}    10s
+
+    # Controls that come after Company Name, in order (popup found by walking up from Company Name)
+    ${company_field}=    Get WebElement    ${company_name2}
+    @{controls}=    Execute JavaScript
+    ...    let box = arguments[0];
+    ...    while (box && !Array.from(box.querySelectorAll('button')).some(b => b.textContent.includes('Send Invitation'))) { box = box.parentElement; }
+    ...    const all = Array.from(box.querySelectorAll('input, button, select, textarea, a[href], [tabindex]')).filter(e => !e.disabled && e.tabIndex >= 0 && e.offsetParent !== null);
+    ...    return all.slice(all.indexOf(arguments[0]) + 1);
+    ...    ARGUMENTS
+    ...    ${company_field}
+
+    # Place the cursor in the first field
+    Click Element    ${company_name2}
+
+    # Press Tab and verify focus lands on each next control
+    FOR    ${control}    IN    @{controls}
+        Press Keys    None    TAB
+        ${name}=    Execute JavaScript    return arguments[0].getAttribute('placeholder') || arguments[0].getAttribute('aria-label') || arguments[0].innerText.trim() || arguments[0].tagName;    ARGUMENTS    ${control}
+        ${focused}=    Execute JavaScript    return document.activeElement === arguments[0];    ARGUMENTS    ${control}
+        Should Be True    ${focused}    Tab focus did not move to [${name}] as expected.
+        Log To Console    Tab focus OK: ${name}
+    END
+
+    Log To Console    Focus moved sequentially through all invitation form controls without skipping any.
+
+Verify Invitation Form Responsive Layout
+    Wait Until Element Is Visible    ${company_name2}    15s
+    Click Element Custom    ${Licensed}
+    Wait Until Element Is Visible    ${Subscription_Duration}    10s
+    ${company_field}=    Get WebElement    ${company_name2}
+
+    FOR    ${width}    ${height}    IN    1920    1080    768    1024    390    844
+        Set Window Size    ${width}    ${height}
+        Sleep    1s
+
+        # All form controls must remain visible
+        FOR    ${locator}    IN    ${company_name2}    ${First_name2}    ${Last_name2}    ${company_email2}    ${User_Credits1}    ${Subscription_Duration}    ${Auto_Renew_Toggle}    ${INVITATION_CANCEL_BUTTON}    ${Send_Invitation}
+            Element Should Be Visible    ${locator}    Control not visible at ${width}px.
+        END
+
+        # No controls outside the screen, truncated, overlapping, and no horizontal scroll
+        @{issues}=    Execute JavaScript
+        ...    let b = arguments[0]; while (b && ![...b.querySelectorAll('button')].some(x => x.textContent.includes('Send Invitation'))) b = b.parentElement;
+        ...    const w = innerWidth, out = [], n = e => e.placeholder || e.innerText.trim() || e.tagName;
+        ...    const els = [...b.querySelectorAll('input, button')].filter(e => e.offsetParent && e.type !== 'tel');
+        ...    els.forEach((e, i) => { const r = e.getBoundingClientRect();
+        ...    if (r.left < 0 || r.right > w) out.push('Outside screen: ' + n(e));
+        ...    if (e.tagName == 'BUTTON' && e.scrollWidth > e.clientWidth + 1) out.push('Truncated: ' + n(e));
+        ...    els.slice(i + 1).forEach(f => { const o = f.getBoundingClientRect(); if (r.left < o.right - 1 && r.right > o.left + 1 && r.top < o.bottom - 1 && r.bottom > o.top + 1) out.push('Overlap: ' + n(e) + ' / ' + n(f)); }); });
+        ...    if (document.documentElement.scrollWidth > w + 1) out.push('Horizontal scroll');
+        ...    return out;
+        ...    ARGUMENTS
+        ...    ${company_field}
+        Should Be Empty    ${issues}    Layout issues at ${width}px: ${issues}
+
+        Capture Page Screenshot    responsive-${width}px.png
+        Log To Console    ${width} x ${height}: no visibility, overlap, truncation or layout issues.
+    END
+
+    Maximize Browser Window
+
+Validate Form Behavior On Enter Key
+    ${company}    ${first_name}    ${last_name}    ${mobile}    ${email}=    Generate Unique Tenants Data
+    @{defects}=    Create List
+
+    # Valid data + Enter: form should submit
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company}    2
+    Fill Field By Placeholders    e.g. Steve    ${first_name}    2
+    Fill Field By Placeholders    e.g. Smith    ${last_name}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${email}    2
+    Click Element Custom    ${Licensed}
+    Input Text Custom    ${User_Credits1}    10
+    Input Text Custom    ${Subscription_Duration}    12
+    Press Keys    ${Subscription_Duration}    ENTER
+    Sleep    2s
+    Capture Page Screenshot    enter-key-valid.png
+    ${submitted}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]    10s
+    IF    not ${submitted}
+        Append To List    ${defects}    Valid data: form was not submitted when Enter was pressed.
+    END
+
+    # Reopen the form if it was submitted, otherwise continue on the same open form
+    IF    ${submitted}
+        Invite Tenant Creation
+        Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${company}2    2
+        Fill Field By Placeholders    e.g. Steve    ${first_name}    2
+        Fill Field By Placeholders    e.g. Smith    ${last_name}    2
+        Input Text    xpath=//input[@type='tel']    9797889977
+        Click Element Custom    ${Licensed}
+        Input Text Custom    ${User_Credits1}    10
+        Input Text Custom    ${Subscription_Duration}    12
+    END
+
+    # Invalid data + Enter: submission should be blocked with a validation message
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    admin    2
+    Press Keys    ${Subscription_Duration}    ENTER
+    Sleep    2s
+    Capture Page Screenshot    enter-key-invalid.png
+    ${message_shown}=    Run Keyword And Return Status    Page Should Contain    Please enter a valid email address.
+    IF    not ${message_shown}
+        Append To List    ${defects}    Invalid data: no validation message displayed when Enter was pressed.
+    END
+    Page Should Not Contain    Licensed invite created
+
+    Should Be Empty    ${defects}    Enter key defects: ${defects}
+    Log To Console    Enter key: valid data submitted and invalid data blocked with a validation message.
+
+Validate Script Tags Are Rejected
+    ${company}    ${first_name}    ${last_name}    ${mobile}    ${email}=    Generate Unique Tenants Data
+    ${payload}=    Set Variable    <script>alert(1)</script>
+
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${payload}    2
+    Fill Field By Placeholders    e.g. Steve    ${payload}    2
+    Fill Field By Placeholders    e.g. Smith    ${payload}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${email}    2
+    Click Element Custom    ${Licensed}
+    Input Text Custom    ${User_Credits1}    10
+    Input Text Custom    ${Subscription_Duration}    12
+    Click Element Custom    ${Send_Invitation}
+    Sleep    3s
+    Capture Page Screenshot    script-tag-result.png
+
+    Alert Should Not Be Present    Script executed: alert(1) dialog was displayed.
+    Page Should Not Contain    Licensed invite created    Script payload was accepted without being rejected or sanitized.
+    Page Should Not Contain    Internal Server Error
+    Log To Console    Script tags rejected: no script executed and the application remained stable.    
