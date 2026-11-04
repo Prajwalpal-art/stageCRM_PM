@@ -53,6 +53,13 @@ ${INVITATION_CANCEL}    xpath=(//button[normalize-space()='Cancel' or .//*[norma
 ${INVITE_COMPANY_NAME_FIELD}    xpath=(//*[contains(@placeholder,'e.g. Wealthmax Financial Advisers')])[2]
 ${INVITATION_CANCEL_BUTTON}    xpath=(//button[normalize-space()='Cancel' or .//*[normalize-space()='Cancel']])[last()]
 ${INVITATION_CLOSE_ICON}    //*[contains(@aria-label, "Close popup")]
+${ONBOARDING_LINK}    xpath=//a[contains(@href,'/set-password?token=')]
+${PASSWORD_FIELD}    xpath=(//input[@type='password'])[1]
+${CONFIRM_PASSWORD_FIELD}    xpath=(//input[@type='password'])[2]
+${SET_PASSWORD_BUTTON}    xpath=//button[contains(normalize-space(.),'Set Password') or contains(normalize-space(.),'Continue')]
+${TENANT_OTP}    123456
+${OTP_INPUTS}    xpath=//input[not(@type='hidden') and not(@type='password') and not(@type='checkbox')]
+
 
 
 *** Keywords ***
@@ -145,6 +152,20 @@ Run Conduct Check
     END
     Wait Until Element Is Visible    xpath=//button[contains(normalize-space(), 'Save')]    timeout=10s
     Click Element Custom    xpath=//button[contains(normalize-space(), 'Save')]
+# Run Conduct Check For Tenant
+#     Scroll Down    0    500
+#     # Wait Until Element Is Visible    (//button[contains(.,'Run Conduct Check')])[last()]    timeout=15s
+#     # Click Element Custom    (//button[contains(.,'Run Conduct Check')])[last()]
+#     Sleep    3s
+#     ${no_buttons}=    Get WebElements    //span[normalize-space()='No']/ancestor::button
+#     FOR    ${button}    IN    @{no_buttons}
+#         ${is_visible}=    Run Keyword And Return Status    Element Should Be Visible    ${button}
+#         IF    ${is_visible}
+#             Click Element    ${button}
+#         END
+#     END
+#     Wait Until Element Is Visible    xpath=//button[contains(normalize-space(), 'Save')]    timeout=10s
+#     Click Element Custom    xpath=//button[contains(normalize-space(), 'Save')]    
 Upload Multiple Documents
     [Arguments]    ${doc_type1}    ${file_path1}
     Select Document Type1    ${doc_type1}
@@ -816,7 +837,7 @@ Search Invitation Email In Outlook
     Wait Until Page Contains    ${INVITATION_SUBJECT}    30s
     Page Should Contain    ${INVITATION_SUBJECT}
 
-    Capture Page Screenshot    outlook-search-results.png
+    # Capture Page Screenshot    outlook-search-results.png
 
     Log To Console    WealthMax invitation email found successfully for: ${recipient_email}
 
@@ -1254,7 +1275,7 @@ Verify Invitation Form Responsive Layout
         ...    ${company_field}
         Should Be Empty    ${issues}    Layout issues at ${width}px: ${issues}
 
-        Capture Page Screenshot    responsive-${width}px.png
+        # Capture Page Screenshot    responsive-${width}px.png
         Log To Console    ${width} x ${height}: no visibility, overlap, truncation or layout issues.
     END
 
@@ -1275,7 +1296,7 @@ Validate Form Behavior On Enter Key
     Input Text Custom    ${Subscription_Duration}    12
     Press Keys    ${Subscription_Duration}    ENTER
     Sleep    2s
-    Capture Page Screenshot    enter-key-valid.png
+    # Capture Page Screenshot    enter-key-valid.png
     ${submitted}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath=//*[@role='status' and contains(normalize-space(.),'Licensed invite created')]    10s
     IF    not ${submitted}
         Append To List    ${defects}    Valid data: form was not submitted when Enter was pressed.
@@ -1297,7 +1318,7 @@ Validate Form Behavior On Enter Key
     Fill Field By Placeholders    e.g. abc.def@gmail.com    admin    2
     Press Keys    ${Subscription_Duration}    ENTER
     Sleep    2s
-    Capture Page Screenshot    enter-key-invalid.png
+    # Capture Page Screenshot    enter-key-invalid.png
     ${message_shown}=    Run Keyword And Return Status    Page Should Contain    Please enter a valid email address.
     IF    not ${message_shown}
         Append To List    ${defects}    Invalid data: no validation message displayed when Enter was pressed.
@@ -1321,9 +1342,162 @@ Validate Script Tags Are Rejected
     Input Text Custom    ${Subscription_Duration}    12
     Click Element Custom    ${Send_Invitation}
     Sleep    3s
-    Capture Page Screenshot    script-tag-result.png
+    # Capture Page Screenshot    script-tag-result.png
 
     Alert Should Not Be Present    Script executed: alert(1) dialog was displayed.
     Page Should Not Contain    Licensed invite created    Script payload was accepted without being rejected or sanitized.
     Page Should Not Contain    Internal Server Error
     Log To Console    Script tags rejected: no script executed and the application remained stable.    
+
+Validate SQL Injection Is Prevented
+    ${company}    ${first_name}    ${last_name}    ${mobile}    ${email}=    Generate Unique Tenants Data
+    ${payload}=    Set Variable    ' OR 1=1 --
+
+    Fill Field By Placeholders    e.g. Wealthmax Financial Advisers    ${payload}    2
+    Fill Field By Placeholders    e.g. Steve    ${payload}    2
+    Fill Field By Placeholders    e.g. Smith    ${payload}    2
+    Input Text    xpath=//input[@type='tel']    9797889977
+    Fill Field By Placeholders    e.g. abc.def@gmail.com    ${email}    2
+    Click Element Custom    ${Licensed}
+    Input Text Custom    ${User_Credits1}    10
+    Input Text Custom    ${Subscription_Duration}    12
+    Click Element Custom    ${Send_Invitation}
+    Sleep    3s
+    # Capture Page Screenshot    sql-injection-result.png
+
+    Page Should Not Contain    Licensed invite created    SQL payload was accepted without being rejected or sanitized.
+    Page Should Not Contain    Internal Server Error
+    Page Should Not Contain    SQL syntax
+    Page Should Not Contain    SQLSTATE
+    Element Should Be Visible    ${Send_Invitation}    Application did not remain stable on the invitation form.
+    Log To Console    SQL injection prevented: no SQL error, no unexpected data, application stable.    
+
+Open Onboarding Link From Invitation Email
+    Wait Until Element Is Visible    ${ONBOARDING_LINK}    30s
+    Set Log Level    NONE
+    ${url}=    Get Element Attribute    ${ONBOARDING_LINK}    href
+    ${valid}=    Evaluate    $url.startswith("https://stg.crm.wealthmax.co.uk/set-password?token=") and len($url.split("token=", 1)[1]) > 0
+    Run Keyword If    ${valid}    Execute JavaScript    window.open(arguments[0], '_blank');    ARGUMENTS    ${url}
+    Set Log Level    INFO
+    Should Be True    ${valid}    Invitation email does not contain a valid secure onboarding URL.
+    Switch Window    NEW
+    Wait Until Location Contains    /set-password    30s
+
+Complete Invited Tenant Password Setup
+    ${password}=    Get Environment Variable    TENANT_ONBOARDING_PASSWORD    ${EMPTY}
+    Should Not Be Empty    ${password}    TENANT_ONBOARDING_PASSWORD environment variable is not configured.
+    Wait Until Element Is Visible    ${PASSWORD_FIELD}    30s
+    Set Log Level    NONE
+    Input Password    ${PASSWORD_FIELD}    ${password}
+    Input Password    ${CONFIRM_PASSWORD_FIELD}    ${password}
+    Set Log Level    INFO
+    Click Element Custom    ${SET_PASSWORD_BUTTON}
+
+Verify Onboarded Tenant License Assignment
+    [Arguments]    ${tenant_email}
+    Switch Browser    1
+    Click Element Custom    ${Tenant_Management}
+    ${email_lower}=    Convert To Lower Case    ${tenant_email}
+    ${row}=    Set Variable    xpath=//*[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'${email_lower}')]/ancestor::tr[1]
+    Wait Until Element Is Visible    ${row}    30s    Onboarded tenant was not found in Tenant Management.
+    ${details}=    Get Text    ${row}
+    Should Contain    ${details}    Licensed    Licensed subscription was not assigned to the tenant.    
+Verify Password Set Confirmation
+    Wait Until Page Contains    Password Set    30s
+    Page Should Contain    Your account is ready. Continue to login.
+    # Capture Page Screenshot    onboarding-password-set.png
+    Log To Console    Password set successfully. Tenant account is ready.
+
+Login As Invited Tenant
+    [Arguments]    ${tenant_email}
+    ${password}=    Get Environment Variable    TENANT_ONBOARDING_PASSWORD    ${EMPTY}
+    Should Not Be Empty    ${password}    TENANT_ONBOARDING_PASSWORD environment variable is not configured.
+    Click Element Custom    xpath=//button[normalize-space()='Back to Login']
+    Wait Until Element Is Visible    xpath=(//input[@type='password'])[1]    30s
+    Input Text    xpath=(//input[not(@type='password') and not(@type='hidden')])[1]    ${tenant_email}
+    Set Log Level    NONE
+    Input Password    xpath=(//input[@type='password'])[1]    ${password}
+    Set Log Level    INFO
+    Click Element Custom    xpath=//button[contains(normalize-space(.),'Login') or contains(normalize-space(.),'Sign in')]
+    Sleep    5s
+    # Capture Page Screenshot    onboarding-after-login.png
+    ${page_text}=    Get Text    xpath=//body
+    Log To Console    PAGE TEXT AFTER LOGIN: ${page_text}    
+Enter Tenant OTP And Verify
+    Wait Until Element Is Visible    ${OTP_xpath}    10s
+    FOR    ${index}    IN RANGE    0    6
+        Input Text   (//*[contains(@maxlength, '1')])[${index + 1}]    ${OTP}[${index}]
+    END
+    Click Element Custom    ${Verify_Button}
+    
+
+Complete Company Details Step
+    ${company_name}    ${company_title}    ${company_number}    ${company_email}    ${compliance_email}=    Generate Unique Tenant Data
+     
+    Fill Field By Placeholder    e.g. Ltd, PLC    ${company_title}    2
+    Fill Field By Placeholder    e.g. 12345678    ${company_number}    2
+    Fill Field By Placeholder    https://yourcompany.com    https://yourcompany.com    2
+    Fill Field By Placeholder    Enter phone number    ${User_phonenumber}    1
+    Fill Field By Placeholder    info@company.com    ${company_email}    2
+    Fill Field By Placeholder    compliance@company.com    ${compliance_email}    2
+    Input Text Custom    //input[@id='input-reusable-13' and @type='text' and @placeholder='e.g. TW89DW']    TW89DW
+    Fill Field By Placeholder    Select address      GULF AIR, 1000 GREAT WEST ROAD, BRENTFORD, MIDDLESEX 
+    Click Element Custom    //button[@type='button' and normalize-space()='Next']
+
+
+Complete Admin Details Step
+    Fill Adult DOB
+    Click Element Custom    (//span[normalize-space()='Select nationality'])[1]    
+    Click Element Custom    //div[contains(@class,'text-slate900') and normalize-space()='United Kingdom']
+# Click Element Custom    (//*[contains(text(), 'United Kingdom')])[last()]
+    Click Element Custom    (//*[contains(text(), 'Same as Company Details')])[2]
+    Click Element With JavaScript    Next
+    # Wait Until Element Is Visible    xpath=(//button[contains(.,'Run Conduct Check')])[last()]    30s
+
+Complete Conduct Step
+    Wait Until Element Is Visible    xpath=(//button[normalize-space(.)='No'])[1]    30s
+    ${no_buttons}=    Get WebElements    xpath=//button[normalize-space(.)='No']
+    ${count}=    Get Length    ${no_buttons}
+    Should Be True    ${count} >= 16    Expected 16 No buttons, but found ${count}.
+    FOR    ${button}    IN    @{no_buttons}
+        Execute JavaScript    arguments[0].scrollIntoView({block:'center'}); arguments[0].click();    ARGUMENTS    ${button}
+    END
+    
+    Click Element Custom    //button[contains(@class,'bg-indigo600') and @type='button' and normalize-space()='Next']
+    Sleep    3s
+    Log To Console    Selected No for all ${count} conduct questions and continued.
+    # Capture Page Screenshot    onboarding-conduct.png
+
+Complete Documents Step
+    ${docs}=    Set Variable    C:/Users/PRAJWAL SINGH/Downloads
+    ${logo}=    Set Variable    ${docs}/bikes-5972672_1920.jpg.jpg
+    ${pdf}=     Set Variable    ${docs}/input (1).pdf.pdf
+
+    File Should Exist    ${logo}
+    File Should Exist    ${pdf}
+
+    Choose File    xpath=(//input[@type='file'])[1]    ${logo}
+
+    FOR    ${index}    IN RANGE    2    9
+        Choose File    xpath=(//input[@type='file'])[${index}]    ${pdf}
+    END
+
+    Wait Until Page Contains    8 of 8 documents uploaded    60s
+    
+    Click Element With JavaScript    Submit
+    Sleep    2s
+
+    Log To Console    All 8 documents uploaded and submitted successfully.
+     ${checkboxes}=    Get WebElements    xpath=//input[@type='checkbox']
+
+    FOR    ${checkbox}    IN    @{checkboxes}
+        Click Element    ${checkbox}
+    END
+
+    ${submit}=    Set Variable
+    ...    xpath=(//button[contains(normalize-space(.),'Submit')])[last()]
+
+    Wait Until Element Is Enabled    ${submit}    15s
+    Click Element Custom    ${submit}
+
+    Log To Console    Service Agreement accepted and submitted successfully.

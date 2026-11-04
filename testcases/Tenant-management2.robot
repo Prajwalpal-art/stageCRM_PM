@@ -648,3 +648,30 @@ Verify Script Tags Are Rejected
     login to stageCRM
     Invite Tenant Creation
     Validate Script Tags Are Rejected    
+Verify SQL Injection Prevention
+    [Documentation]    IT_LT_049 - Verify the SQL injection payload is rejected or sanitized and does not affect the application.
+    [Tags]    IT_LT_049    Regression    LicensedTenant    Security
+
+    login to stageCRM
+    Invite Tenant Creation
+    Validate SQL Injection Is Prevented    
+Verify Invited Tenant Completes Onboarding Using Invitation Link
+    [Documentation]    IT_LT_050 - Verify an invited tenant opens the invitation link, sets a password, logs in and completes the onboarding application.
+    [Tags]    IT_LT_050    Regression    LicensedTenant    Onboarding    Email
+
+    login to stageCRM
+    Invite Tenant Creation
+    ${tenant_email}=    Create Invite Tenant Licenced 1
+    Open Outlook Test Mailbox
+    Wait Until Keyword Succeeds    3 min    15 sec    Search Invitation Email In Outlook    ${tenant_email}
+    Open And Inspect WealthMax Invitation Email    ${tenant_email}
+    Open Onboarding Link From Invitation Email
+    Complete Invited Tenant Password Setup
+    Verify Password Set Confirmation
+    Login As Invited Tenant    ${tenant_email}
+    Enter Tenant OTP And Verify
+    # Sleep    90000s
+    Complete Company Details Step
+    Complete Admin Details Step
+    Complete Conduct Step
+    Complete Documents Step    
