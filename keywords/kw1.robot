@@ -134,16 +134,7 @@ Create User Management
     Click Element Custom    ${General_Management}
     Click Element Custom    ${Create_Xpath}
 
-# Read Password From Email
-#     Read Password From Email
-#     Open Mailbox    host=${IMAP_HOST}    user=${IMAP_USER}    password=${IMAP_PASS}    port=${IMAP_PORT}    ssl=True
-#     Select Folder    ${MAILBOX}
-#     ${uids}=    Search Messages    SUBJECT "${SUBJECT}"
-#     Should Not Be Empty    ${uids}
-#     ${message}=    Get Message    ${uids}[-1]
-#     ${body}=    Get Body Text    ${message}
-#     Log    ${body}
-#     Close Mailbox
+
 Search User
     Click Element Custom    ${User_Management}
     Input Text Custom    ${Search_Button}    ${First_Name}
