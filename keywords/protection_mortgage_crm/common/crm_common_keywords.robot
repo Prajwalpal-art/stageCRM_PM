@@ -1,7 +1,8 @@
 *** Settings ***
 Library    SeleniumLibrary
 Library    OperatingSystem
-Library    String
+Library    Process
+Library    Collections
 
 Resource    crm_common_variables.robot
 
