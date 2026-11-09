@@ -1,5 +1,11 @@
 *** Variables ***
-${CRM_LOGIN_EMAIL_LOCATOR}       id:REPLACE_WITH_EMAIL_FIELD_ID
-${CRM_LOGIN_PASSWORD_LOCATOR}    id:REPLACE_WITH_PASSWORD_FIELD_ID
-${CRM_LOGIN_OTP_LOCATOR}         id:REPLACE_WITH_OTP_FIELD_ID
-${CRM_LOGIN_SUBMIT_LOCATOR}      id:REPLACE_WITH_LOGIN_BUTTON_ID
+${URL}    https://stg.crm.wealthmax.co.uk
+# ${BROWSER}    chrome
+# ${Email_css}    css:input[type='email']
+# ${Password_css}     css:input[type='password']
+# ${Email_Id}    Prajwal.s+111@wealthmax.co.uk
+# ${Password}    Mybell@123
+# ${Login_Button}    css:app-button-reusable[type='submit']
+# ${OTP}    123456
+# ${OTP_xpath}     (//*[contains(@maxlength, '1')])
+# ${Verify_Button}    //*[contains(text(),'Verify')]

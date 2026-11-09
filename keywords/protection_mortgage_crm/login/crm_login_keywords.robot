@@ -5,3 +5,5 @@ Resource    crm_login_variables.robot
 *** Keywords ***
 CRM Login Smoke Placeholder
     CRM Smoke Placeholder
+       
+    
